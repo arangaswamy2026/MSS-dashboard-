@@ -1,0 +1,2368 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MSS Dashboard — Northwind Security Group</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,200..1000&display=swap" rel="stylesheet">
+<style>
+/* ================================================================
+   UUIF 9.2 — MSS Dashboard Redesign
+   Design System: SonicWall Unified UI Framework v9.2
+   ================================================================ */
+
+/* ── DESIGN TOKENS ─────────────────────────────────────────────── */
+:root {
+  /* Text */
+  --uuif-text-primary:       #191c25;
+  --uuif-text-secondary:     #4a618f;
+  --uuif-text-tertiary:      #888888;
+  --uuif-text-contrast:      #ffffff;
+  --uuif-text-disabled:      rgba(17,17,17,0.30);
+  --uuif-text-hover:         #ff5d00;
+  --uuif-text-selected:      #ffffff;
+  --uuif-text-highlight:     #0c2b67;
+  /* Surface */
+  --uuif-surface-container:  #ffffff;
+  --uuif-surface-bg:         #fafafa;
+  --uuif-surface-primary:    #5b74a7;
+  --uuif-surface-secondary:  #d2dff2;
+  --uuif-surface-tertiary:   #f6f8fe;
+  --uuif-surface-highlight:  #ff5d00;
+  --uuif-surface-hover:      rgba(17,17,17,0.06);
+  --uuif-surface-selected:   rgba(255,72,26,0.09);
+  --uuif-surface-disabled:   #e8eff9;
+  --uuif-surface-contrast:   #111315;
+  --uuif-surface-model:      #f0f2f5;
+  /* Border */
+  --uuif-border-primary:     #ff5d00;
+  --uuif-border-secondary:   #78a3e5;
+  --uuif-border-tertiary:    #cccccc;
+  --uuif-border-transparent: rgba(17,17,17,0.09);
+  --uuif-border-disabled:    #d2dff2;
+  --uuif-border-hover:       #ff5d00;
+  --uuif-border-selected:    #ffffff;
+  /* Icon */
+  --uuif-icon-primary:       #5885cc;
+  --uuif-icon-secondary:     #9dafd3;
+  --uuif-icon-tertiary:      #62686d;
+  --uuif-icon-hover:         #ff5d00;
+  /* Brand */
+  --uuif-brand-navy:         #001b50;
+  --uuif-brand-blue:         #1f3c73;
+  --uuif-brand-orange:       #ff5d00;
+  --uuif-brand-green:        #59a02e;
+  --uuif-brand-red:          #c70f0f;
+  --uuif-brand-yellow:       #f3ac3d;
+  --uuif-theme-text-primary:    #001b50;
+  --uuif-theme-text-secondary:  #5b74a7;
+  --uuif-theme-bg-primary:      #001b50;
+  --uuif-theme-bg-secondary:    #d2dff2;
+  /* Status */
+  --uuif-status-normal:  #99CC00;
+  --uuif-status-minor:   #FFCC00;
+  --uuif-status-major:   #FF9900;
+  --uuif-status-high:    #FF0000;
+  --uuif-status-failed:  #CC0000;
+  /* Fill */
+  --uuif-fill-blue-lightest:       #f6f8fe;
+  --uuif-fill-green-xxx-lighter:   #e3efdc;
+  --uuif-fill-yellow-xxx-lighter:  #ffe9be;
+  --uuif-fill-red-lightest:        #fff0f0;
+  --uuif-fill-green-x-darker:      #478234;
+  --uuif-fill-orange-x-darker:     #c24903;
+  --uuif-fill-red-x-darker:        #ab0a0c;
+  /* Spacing */
+  --uuif-sp-1: 2px;   --uuif-sp-2: 4px;   --uuif-sp-3: 8px;
+  --uuif-sp-4: 12px;  --uuif-sp-5: 16px;  --uuif-sp-6: 20px;
+  --uuif-sp-7: 24px;  --uuif-sp-8: 32px;  --uuif-sp-9: 40px;
+  --uuif-sp-10: 48px; --uuif-sp-12: 64px;
+  /* Radius */
+  --uuif-radius-4:   4px;   --uuif-radius-6:   6px;
+  --uuif-radius-8:   8px;   --uuif-radius-12: 12px;
+  --uuif-radius-22: 22px;   --uuif-radius-pill: 88px;
+  /* Shadow */
+  --uuif-shadow-sm: 0px 1px 6px 2px rgba(0,0,0,0.12);
+  --uuif-shadow-md: 0px 4px 12px 0px rgba(0,0,0,0.16);
+  /* Font */
+  --uuif-font-family: 'Nunito Sans', sans-serif;
+}
+
+/* ── RESET & BASE ───────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body { font-family: var(--uuif-font-family); font-size: 13px;
+       color: var(--uuif-text-primary); background: var(--uuif-surface-bg); }
+a { color: inherit; text-decoration: none; }
+button { font-family: var(--uuif-font-family); cursor: pointer; }
+svg { flex-shrink: 0; }
+section[data-page] { display: contents; }
+section[data-page][hidden] { display: none !important; }
+
+/* ── APP SHELL ──────────────────────────────────────────────────── */
+.uuif-app  { display: flex; height: 100vh; overflow: hidden; }
+.uuif-main { display: flex; flex-direction: column; flex: 1; min-width: 0; overflow: hidden; }
+
+/* ── PRIMARY NAV RAIL ───────────────────────────────────────────── */
+.uuif-nav-rail {
+  width: 60px; flex-shrink: 0; height: 100%;
+  background: var(--uuif-brand-navy);
+  display: flex; flex-direction: column; align-items: center;
+}
+.uuif-nav-logo {
+  display: flex; align-items: center; justify-content: center;
+  width: 60px; height: 52px; flex-shrink: 0;
+}
+.uuif-nav-item {
+  display: flex; align-items: center; justify-content: center;
+  width: 60px; height: 52px; color: #d2dff2;
+  position: relative; cursor: pointer; flex-shrink: 0;
+  border: none; background: none; text-decoration: none;
+  transition: color .15s;
+}
+.uuif-nav-item:hover { color: #ff5d00; }
+.uuif-nav-item.is-selected { color: #ff5d00; background: rgba(17,17,17,.40); }
+.uuif-nav-item.is-selected::before {
+  content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+  width: 2px; height: 36px; background: var(--uuif-brand-orange);
+  border-radius: 0 2px 2px 0;
+}
+.uuif-nav-divider { width: 44px; height: 1px; background: rgba(255,255,255,.15); margin: 2px auto; flex-shrink: 0; }
+.uuif-nav-spacer  { flex: 1; }
+
+/* ── SUBNAV PANEL ───────────────────────────────────────────────── */
+.uuif-subnav {
+  width: 266px; flex-shrink: 0; height: 100%;
+  background: var(--uuif-surface-container);
+  border-right: 1px solid var(--uuif-border-tertiary);
+  display: flex; flex-direction: column; overflow-y: auto;
+}
+.uuif-subnav-hd {
+  padding: 12px 16px 10px;
+  border-bottom: 1px solid var(--uuif-border-tertiary);
+  display: flex; align-items: flex-start; gap: var(--uuif-sp-3); flex-shrink: 0;
+}
+.uuif-subnav-brand   { font: 800 16px/1 var(--uuif-font-family); color: var(--uuif-brand-orange); letter-spacing: -0.02em; }
+.uuif-subnav-product { font: 600 14px/1 var(--uuif-font-family); color: #e67f02; margin-top: 2px; }
+.uuif-subnav-tab-title {
+  padding: 12px 16px 8px; flex-shrink: 0;
+  font: 600 16px/1 var(--uuif-font-family);
+  text-transform: uppercase; color: var(--uuif-brand-navy);
+}
+.uuif-subnav-nav     { padding: 0 var(--uuif-sp-3) var(--uuif-sp-5); }
+.uuif-subnav-section {
+  padding: var(--uuif-sp-4) var(--uuif-sp-3) var(--uuif-sp-1);
+  font: 600 12px/1 var(--uuif-font-family); color: var(--uuif-brand-navy);
+  text-transform: uppercase; letter-spacing: .06em;
+}
+.uuif-subnav-link {
+  display: flex; align-items: center;
+  padding: var(--uuif-sp-2) var(--uuif-sp-3);
+  font: 400 13px/1.4 var(--uuif-font-family);
+  color: var(--uuif-text-secondary);
+  border-radius: var(--uuif-radius-4); text-decoration: none;
+}
+.uuif-subnav-link:hover { background: var(--uuif-surface-hover); color: var(--uuif-text-hover); }
+.uuif-subnav-link.is-active {
+  background: var(--uuif-surface-selected);
+  font-size: 12px; font-weight: 600; color: #e67f02; border-radius: 5px;
+}
+
+/* ── TOP ACTION BAR ─────────────────────────────────────────────── */
+.uuif-topbar {
+  height: 46px; flex-shrink: 0;
+  background: var(--uuif-surface-container);
+  border-bottom: 1px solid var(--uuif-border-tertiary);
+  display: flex; align-items: center; padding: 0 var(--uuif-sp-5); gap: var(--uuif-sp-3);
+}
+.uuif-breadcrumb {
+  display: flex; align-items: center; gap: var(--uuif-sp-2);
+  font-size: 12px; color: var(--uuif-theme-text-secondary);
+  flex: 1; min-width: 0; white-space: nowrap; overflow: hidden;
+}
+.uuif-breadcrumb .cur { color: var(--uuif-text-primary); font-weight: 600; }
+.uuif-crumb-sep { color: var(--uuif-border-tertiary); }
+
+/* Scope Selector */
+.uuif-scope-selector { position: relative; width: 340px; max-width: 36vw; flex-shrink: 0; }
+.uuif-scope-trigger {
+  height: 29px; display: flex; align-items: center; gap: 6px;
+  padding: 5.5px 8px; cursor: pointer;
+  background: var(--uuif-surface-container);
+  border: .5px solid var(--uuif-border-tertiary);
+  border-radius: var(--uuif-radius-4); color: var(--uuif-icon-secondary);
+}
+.uuif-scope-trigger:hover,
+.uuif-scope-trigger.open { border-color: var(--uuif-border-secondary); }
+.uuif-scope-trigger.open .uuif-scope-chevron { transform: rotate(180deg); }
+.uuif-scope-divider { width: 1px; height: 16px; background: var(--uuif-border-tertiary); flex-shrink: 0; margin: 0 3px; }
+.uuif-scope-label   { flex: 1; font: 400 13px/1 var(--uuif-font-family); color: var(--uuif-text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.uuif-scope-chevron { flex-shrink: 0; transition: transform .15s; color: var(--uuif-text-secondary); }
+.uuif-scope-dropdown {
+  display: none; position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+  background: var(--uuif-surface-container);
+  border: .5px solid var(--uuif-border-tertiary);
+  border-radius: var(--uuif-radius-6); box-shadow: var(--uuif-shadow-sm);
+  max-height: 240px; overflow-y: auto; z-index: 100;
+}
+.uuif-scope-dropdown.open { display: block; }
+.uuif-scope-item {
+  display: flex; align-items: center; gap: var(--uuif-sp-3);
+  padding: 8px 12px; height: 36px;
+  font: 400 13px/1 var(--uuif-font-family); color: var(--uuif-theme-text-secondary); cursor: pointer;
+}
+.uuif-scope-item:hover   { background: var(--uuif-surface-hover); }
+.uuif-scope-item.sel     { background: var(--uuif-surface-selected); color: var(--uuif-brand-orange); }
+.uuif-scope-item-child   { padding-left: 24px; }
+.uuif-scope-status-dot   { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.uuif-scope-status-dot.online { background: var(--uuif-status-normal); }
+.uuif-scope-status-dot.active { background: var(--uuif-brand-orange); }
+
+/* Topbar right */
+.uuif-topbar-flex  { flex: 1; min-width: 4px; }
+.uuif-topbar-icons { display: flex; align-items: center; gap: var(--uuif-sp-4); }
+.uuif-top-bar__icon-btn {
+  display: flex; align-items: center; justify-content: center;
+  color: var(--uuif-icon-secondary); cursor: pointer; position: relative;
+  border: none; background: none; padding: 2px;
+}
+.uuif-top-bar__icon-btn:hover { color: var(--uuif-icon-hover); }
+.uuif-topbar-badge {
+  position: absolute; top: -4px; right: -5px;
+  background: var(--uuif-brand-red); color: #fff;
+  font: 700 12px/14px var(--uuif-font-family);
+  min-width: 14px; height: 14px; border-radius: 88px; padding: 0 3px; text-align: center;
+}
+.uuif-topbar-divider { width: 1px; height: 16px; background: var(--uuif-border-tertiary); flex-shrink: 0; }
+.uuif-avatar-wrap { position: relative; }
+.uuif-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--uuif-surface-primary); color: #fff;
+  font: 600 11px/28px var(--uuif-font-family); text-align: center;
+  cursor: pointer; border: none;
+}
+.uuif-drop-menu {
+  display: none; position: absolute; right: 0; top: calc(100% + 4px);
+  width: 240px; background: var(--uuif-surface-container);
+  border: 1px solid var(--uuif-border-tertiary);
+  border-radius: var(--uuif-radius-6); box-shadow: var(--uuif-shadow-sm); z-index: 200;
+}
+.uuif-drop-menu.open { display: block; }
+.uuif-drop-menu-head {
+  padding: var(--uuif-sp-4) var(--uuif-sp-5);
+  border-bottom: 1px solid var(--uuif-border-tertiary);
+}
+.uuif-drop-menu-head strong { display: block; font: 600 13px/1.3 var(--uuif-font-family); color: var(--uuif-text-primary); }
+.uuif-drop-menu-head span   { font-size: 12px; color: var(--uuif-text-secondary); }
+.uuif-drop-menu-item {
+  display: flex; align-items: center; height: 36px; padding: 0 var(--uuif-sp-5);
+  font: 400 13px/1 var(--uuif-font-family); color: var(--uuif-theme-text-secondary);
+  cursor: pointer; width: 100%; border: none; background: none; text-align: left;
+}
+.uuif-drop-menu-item:hover { background: var(--uuif-surface-hover); color: var(--uuif-text-hover); }
+
+/* ── PAGE CONTENT ───────────────────────────────────────────────── */
+.uuif-page-content {
+  flex: 1; overflow-y: auto;
+  background: var(--uuif-surface-tertiary); padding: 16px;
+}
+section[data-page]:not([hidden]) {
+  background: var(--uuif-surface-container);
+  border-radius: var(--uuif-radius-12);
+  border: 1px solid var(--uuif-border-tertiary);
+  padding: 20px;
+}
+
+/* ── BUTTONS ────────────────────────────────────────────────────── */
+.uuif-btn {
+  display: inline-flex; align-items: center; gap: var(--uuif-sp-2);
+  padding: 5.5px 20px; border-radius: var(--uuif-radius-pill);
+  font: 400 13px/1 var(--uuif-font-family); cursor: pointer;
+  background: var(--uuif-surface-container);
+  border: 1px solid var(--uuif-border-secondary);
+  color: var(--uuif-text-secondary); white-space: nowrap; text-decoration: none;
+  transition: border-color .15s, color .15s;
+}
+.uuif-btn:hover { border-color: var(--uuif-border-hover); color: var(--uuif-text-hover); }
+.uuif-btn--primary { background: var(--uuif-surface-primary); border-color: transparent; color: #fff; }
+.uuif-btn--primary:hover { border-color: transparent; color: #fff; opacity: .9; }
+.uuif-btn--danger  { background: var(--uuif-brand-red); border-color: transparent; color: #fff; }
+.uuif-btn--sm      { padding: 3px 14px; font-size: 12px; }
+.uuif-btn[disabled],
+.uuif-btn--disabled { background: var(--uuif-surface-disabled); border-color: var(--uuif-border-disabled); color: var(--uuif-text-disabled); cursor: not-allowed; }
+
+/* ── INPUT ──────────────────────────────────────────────────────── */
+.uuif-input {
+  height: 29px; padding: 0 12px;
+  background: var(--uuif-surface-container);
+  border: 1px solid var(--uuif-border-tertiary);
+  border-radius: var(--uuif-radius-6);
+  font: 400 13px/1 var(--uuif-font-family); color: var(--uuif-text-primary); outline: none;
+}
+.uuif-input:focus { border-color: var(--uuif-border-secondary); box-shadow: 0 0 0 1px var(--uuif-border-secondary); }
+textarea.uuif-input {
+  height: 90px; padding: var(--uuif-sp-3) 12px;
+  resize: vertical; line-height: 1.5; width: 100%;
+}
+
+/* ── TAB BAR ────────────────────────────────────────────────────── */
+.uuif-tabs {
+  display: flex; align-items: flex-end;
+  background: var(--uuif-surface-container);
+  border-bottom: 1px solid var(--uuif-border-primary);
+  padding: 0 var(--uuif-sp-5); gap: var(--uuif-sp-2);
+  margin-bottom: var(--uuif-sp-5); flex-shrink: 0;
+}
+.uuif-tab {
+  height: 40px; padding: 0 var(--uuif-sp-5);
+  display: inline-flex; align-items: center;
+  font: 400 14px/1 var(--uuif-font-family); color: var(--uuif-theme-text-secondary);
+  cursor: pointer; border: none; background: none;
+  border-bottom: 1px solid transparent; margin-bottom: -1px; white-space: nowrap;
+}
+.uuif-tab:hover { color: var(--uuif-text-hover); }
+.uuif-tab.is-selected {
+  font-weight: 700; color: var(--uuif-text-hover);
+  border: 1px solid var(--uuif-border-primary);
+  border-bottom: none;
+  border-radius: var(--uuif-radius-6) var(--uuif-radius-6) 0 0;
+  background: var(--uuif-surface-container); margin-bottom: -1px;
+}
+
+/* ── CARDS ──────────────────────────────────────────────────────── */
+.uuif-card {
+  background: var(--uuif-surface-container);
+  border: 1px solid var(--uuif-border-tertiary);
+  border-radius: var(--uuif-radius-6); overflow: hidden;
+  margin-bottom: var(--uuif-sp-5);
+}
+.uuif-card-hd {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--uuif-sp-3) var(--uuif-sp-4);
+  background: var(--uuif-surface-model);
+  border-bottom: 1px solid var(--uuif-border-transparent);
+  min-height: 35px;
+}
+.uuif-card-title {
+  font: 700 14px/1 var(--uuif-font-family); color: var(--uuif-text-primary);
+  text-transform: uppercase; display: flex; align-items: center; gap: var(--uuif-sp-3);
+}
+.uuif-card-sub    { font-weight: 400; color: var(--uuif-text-secondary); text-transform: none; font-size: 13px; }
+.uuif-card-hd-actions { display: flex; align-items: center; gap: var(--uuif-sp-3); }
+.uuif-card-bd         { padding: var(--uuif-sp-4); }
+.uuif-card-bd--flush  { padding: 0; }
+.uuif-card-ft {
+  padding: var(--uuif-sp-3) var(--uuif-sp-4);
+  border-top: 1px solid var(--uuif-border-transparent);
+  display: flex; justify-content: flex-end; gap: var(--uuif-sp-3);
+}
+
+/* ── COUNT BLOCKS ───────────────────────────────────────────────── */
+.uuif-count-grid { display: flex; flex-wrap: wrap; gap: var(--uuif-sp-4); margin-bottom: var(--uuif-sp-5); }
+.uuif-count {
+  background: var(--uuif-surface-container);
+  border: 1px solid var(--uuif-border-secondary);
+  border-radius: var(--uuif-radius-8);
+  padding: var(--uuif-sp-4); min-width: 140px; flex: 1;
+}
+.uuif-count-head  { display: flex; align-items: center; gap: var(--uuif-sp-2); margin-bottom: var(--uuif-sp-2); }
+.uuif-count-label { font: 600 12px/1 var(--uuif-font-family); color: var(--uuif-text-secondary); text-transform: uppercase; letter-spacing: .04em; }
+.uuif-count-value { font: 700 20px/1 var(--uuif-font-family); color: var(--uuif-text-primary); }
+.uuif-count-sub   { font-size: 12px; color: var(--uuif-text-secondary); margin-top: var(--uuif-sp-1); }
+.uuif-count--error .uuif-count-value { color: var(--uuif-brand-red); }
+.uuif-count--warn  .uuif-count-value { color: var(--uuif-status-major); }
+.uuif-count--ok    .uuif-count-value { color: var(--uuif-brand-green); }
+
+/* ── DATA TABLE ─────────────────────────────────────────────────── */
+.uuif-table-scroll { overflow-x: auto; }
+.uuif-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.uuif-table thead th {
+  background: var(--uuif-surface-model);
+  border-bottom: 2px solid var(--uuif-border-primary);
+  padding: 7px 12px;
+  font: 700 11px/1 var(--uuif-font-family); color: var(--uuif-text-secondary);
+  text-transform: uppercase; text-align: left; white-space: nowrap;
+}
+.uuif-table thead th.r { text-align: right; }
+.uuif-table tbody td {
+  padding: 7px 12px; color: var(--uuif-text-primary);
+  border-bottom: 1px solid var(--uuif-border-transparent);
+}
+.uuif-table tbody td.r { text-align: right; }
+.uuif-table tbody tr:nth-child(odd)  { background: var(--uuif-surface-container); }
+.uuif-table tbody tr:nth-child(even) { background: var(--uuif-fill-blue-lightest); }
+.uuif-table tbody tr:hover   { background: var(--uuif-surface-tertiary); }
+.uuif-table tbody tr.clickable { cursor: pointer; }
+.tt-name { font-weight: 600; color: var(--uuif-text-highlight); }
+.uuif-table tbody tr.attn-crit td:first-child { box-shadow: inset 3px 0 0 var(--uuif-status-failed); }
+.uuif-table tbody tr.attn-warn td:first-child { box-shadow: inset 3px 0 0 var(--uuif-status-major); }
+.uuif-table tbody tr.attn-info td:first-child { box-shadow: inset 3px 0 0 var(--uuif-status-minor); }
+
+/* ── CHIPS ──────────────────────────────────────────────────────── */
+.uuif-chip {
+  display: inline-flex; align-items: center;
+  height: 22px; padding: 2px 7px; border-radius: var(--uuif-radius-4);
+  font: 400 12px/1 var(--uuif-font-family);
+  background: var(--uuif-surface-tertiary); border: 1px solid var(--uuif-border-secondary);
+  color: var(--uuif-text-secondary); white-space: nowrap;
+}
+.uuif-chip--success  { background: var(--uuif-fill-green-xxx-lighter);  border-color: var(--uuif-brand-green);  color: var(--uuif-fill-green-x-darker);  }
+.uuif-chip--warning  { background: var(--uuif-fill-yellow-xxx-lighter); border-color: var(--uuif-brand-yellow); color: var(--uuif-fill-orange-x-darker); }
+.uuif-chip--error    { background: var(--uuif-fill-red-lightest);       border-color: var(--uuif-brand-red);    color: var(--uuif-fill-red-x-darker);    }
+.uuif-chip--selected { background: var(--uuif-surface-selected); border-color: var(--uuif-border-primary); color: var(--uuif-text-hover); font-weight: 600; }
+
+/* ── SEVERITY ───────────────────────────────────────────────────── */
+.uuif-sev { display: inline-block; width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+.uuif-sev--minor    { background: var(--uuif-status-minor); }
+.uuif-sev--major    { background: var(--uuif-status-major); }
+.uuif-sev--critical { background: var(--uuif-status-failed); }
+.uuif-sev--normal   { background: var(--uuif-status-normal); }
+.sev-cell { display: inline-flex; align-items: center; gap: 5px; }
+.sev-minor    { color: var(--uuif-status-major); }
+.sev-major    { color: var(--uuif-status-major); font-weight: 600; }
+.sev-critical { color: var(--uuif-status-failed); font-weight: 700; }
+
+/* ── STATUS DOT ─────────────────────────────────────────────────── */
+.sta-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.sta-dot.online  { background: var(--uuif-status-normal); }
+.sta-dot.warn    { background: var(--uuif-status-major); }
+.sta-dot.error   { background: var(--uuif-status-failed); }
+.sta-dot.offline { background: var(--uuif-text-tertiary); }
+.sta-cell { display: inline-flex; align-items: center; gap: 5px; }
+
+/* ── STATUS INFO BANNER ─────────────────────────────────────────── */
+.uuif-banner {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 14px 16px; border-radius: var(--uuif-radius-6);
+  border: 1px solid; margin-bottom: var(--uuif-sp-5);
+}
+.uuif-banner--info    { background: var(--uuif-fill-blue-lightest);      border-color: var(--uuif-border-secondary); }
+.uuif-banner--success { background: var(--uuif-fill-green-xxx-lighter);  border-color: var(--uuif-brand-green); }
+.uuif-banner--warning { background: var(--uuif-fill-yellow-xxx-lighter); border-color: var(--uuif-brand-yellow); }
+.uuif-banner--error   { background: var(--uuif-fill-red-lightest);       border-color: var(--uuif-brand-red); }
+.uuif-banner-icon {
+  width: 24px; height: 24px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font: 700 14px/1 var(--uuif-font-family); color: #fff; flex-shrink: 0;
+}
+.uuif-banner--info    .uuif-banner-icon { background: var(--uuif-border-secondary); }
+.uuif-banner--success .uuif-banner-icon { background: var(--uuif-brand-green); }
+.uuif-banner--warning .uuif-banner-icon { background: var(--uuif-brand-yellow); }
+.uuif-banner--error   .uuif-banner-icon { background: var(--uuif-brand-red); }
+.uuif-banner-title { font: 700 16px/1 var(--uuif-font-family); color: var(--uuif-text-secondary); margin-bottom: var(--uuif-sp-2); }
+.uuif-banner-text  { font-size: 13px; color: var(--uuif-text-secondary); line-height: 1.5; }
+
+/* ── TITLE PANE — SUB ───────────────────────────────────────────── */
+.uuif-sub-title-pane {
+  display: flex; align-items: center; gap: 6px;
+  height: 32px; padding: 2px 16px 2px 0; margin-bottom: var(--uuif-sp-4);
+}
+.uuif-sub-title-pane::before {
+  content: ''; display: block; width: 10px; height: 28px; flex-shrink: 0;
+  border-left: 3px solid var(--uuif-brand-orange);
+}
+.uuif-sub-title-pane-text { font: 700 14px/1 var(--uuif-font-family); color: var(--uuif-text-primary); text-transform: uppercase; }
+.uuif-sub-title-pane-flex { flex: 1; }
+
+/* ── PAGE HEADING ───────────────────────────────────────────────── */
+.pg-head    { margin-bottom: var(--uuif-sp-5); }
+.pg-head h1 { font: 700 22px/1 var(--uuif-font-family); color: var(--uuif-text-primary); }
+.pg-head p  { font-size: 13px; color: var(--uuif-text-secondary); margin-top: var(--uuif-sp-2); }
+
+/* ── LAYOUT GRIDS ───────────────────────────────────────────────── */
+.pg-2col  { display: grid; grid-template-columns: 1fr 1fr; gap: var(--uuif-sp-5); }
+.pg-aside { display: grid; grid-template-columns: 1fr 256px; gap: var(--uuif-sp-5); align-items: start; }
+.pg-3col  { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--uuif-sp-5); }
+@media(max-width:900px){ .pg-2col,.pg-aside,.pg-3col { grid-template-columns: 1fr; } }
+
+/* ── RING / GAUGE ───────────────────────────────────────────────── */
+.ring-grid { display: flex; flex-wrap: wrap; gap: var(--uuif-sp-4); margin-bottom: var(--uuif-sp-5); }
+.ring-card {
+  background: var(--uuif-surface-container); border: 1px solid var(--uuif-border-tertiary);
+  border-radius: var(--uuif-radius-8); padding: var(--uuif-sp-5);
+  display: flex; flex-direction: column; align-items: center; min-width: 160px; flex: 1;
+}
+.ring-card--upsell { border-color: var(--uuif-border-secondary); background: var(--uuif-fill-blue-lightest); }
+.ring-cat   { font: 600 12px/1 var(--uuif-font-family); color: var(--uuif-text-secondary); text-transform: uppercase; letter-spacing: .04em; margin-bottom: var(--uuif-sp-3); text-align: center; }
+.ring-wrap  { position: relative; width: 110px; height: 110px; }
+.ring-wrap svg { width: 110px; height: 110px; }
+.ring-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+.ring-pct   { font: 700 16px/1 var(--uuif-font-family); color: var(--uuif-text-highlight); display: block; }
+.ring-of    { font: 400 12px/1 var(--uuif-font-family); color: var(--uuif-text-secondary); display: block; margin-top: 2px; }
+.ring-card--upsell .ring-pct { color: var(--uuif-text-tertiary); }
+.ring-card-sub { font-size: 12px; color: var(--uuif-text-secondary); margin-top: var(--uuif-sp-3); text-align: center; line-height: 1.4; }
+.ring-chips    { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin-top: var(--uuif-sp-2); }
+
+/* ── SERVICE ROWS ───────────────────────────────────────────────── */
+.svc-row {
+  display: flex; align-items: center; gap: var(--uuif-sp-4);
+  padding: var(--uuif-sp-3) var(--uuif-sp-4);
+  border-bottom: 1px solid var(--uuif-border-transparent);
+  color: var(--uuif-text-primary); text-decoration: none;
+}
+.svc-row:hover    { background: var(--uuif-surface-hover); }
+.svc-row:last-child { border-bottom: none; }
+.svc-icon  { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: var(--uuif-icon-primary); flex-shrink: 0; }
+.svc-info  { flex: 1; min-width: 0; }
+.svc-name  { font: 600 13px/1 var(--uuif-font-family); color: var(--uuif-text-highlight); }
+.svc-meta  { font-size: 12px; color: var(--uuif-text-secondary); margin-top: 2px; }
+.svc-big   { font: 700 16px/1 var(--uuif-font-family); color: var(--uuif-text-primary); flex-shrink: 0; text-align: right; }
+.svc-attn  { font: 600 12px/1 var(--uuif-font-family); color: var(--uuif-brand-red); flex-shrink: 0; text-align: right; }
+.svc-ok    { font: 600 12px/1 var(--uuif-font-family); color: var(--uuif-text-secondary); flex-shrink: 0; text-align: right; }
+
+/* ── ACCOUNT SUMMARY ────────────────────────────────────────────── */
+.acct-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: var(--uuif-sp-3) var(--uuif-sp-4);
+  border-bottom: 1px solid var(--uuif-border-transparent);
+  font-size: 13px; text-decoration: none; color: var(--uuif-text-primary);
+}
+.acct-row:hover { background: var(--uuif-surface-hover); }
+.acct-row:last-child { border-bottom: none; }
+.acct-row .k  { color: var(--uuif-text-secondary); }
+.acct-row .v  { font-weight: 600; }
+.acct-row .vw { font-weight: 700; color: var(--uuif-brand-red); }
+.acct-row .vg { font-weight: 700; color: var(--uuif-brand-green); }
+
+/* ── ACCOUNT METRICS GRID ──────────────────────────────────────── */
+.acct-metrics { display: flex; flex-wrap: wrap; gap: var(--uuif-sp-4); margin-bottom: var(--uuif-sp-5); }
+.acct-metric {
+  background: var(--uuif-surface-container);
+  border: 1px solid var(--uuif-border-secondary);
+  border-radius: var(--uuif-radius-8);
+  padding: var(--uuif-sp-4); min-width: 120px; flex: 1;
+}
+.acct-metric-label { font: 600 11px/1 var(--uuif-font-family); color: var(--uuif-text-secondary); text-transform: uppercase; letter-spacing: .04em; margin-bottom: var(--uuif-sp-2); }
+.acct-metric-value { font: 700 20px/1 var(--uuif-font-family); color: var(--uuif-text-primary); }
+.acct-metric-sub { font-size: 12px; color: var(--uuif-text-secondary); margin-top: var(--uuif-sp-1); }
+
+/* ── FUNNEL ─────────────────────────────────────────────────────── */
+.funnel { display: flex; flex-direction: column; gap: var(--uuif-sp-3); }
+.frow   { display: grid; grid-template-columns: 1fr auto; gap: var(--uuif-sp-3); align-items: center; }
+.fbar   { height: 28px; border-radius: var(--uuif-radius-4); display: flex; align-items: center; padding: 0 var(--uuif-sp-4); }
+.fbar.f0 { background: var(--uuif-surface-secondary); }
+.fbar.f1 { background: var(--uuif-border-secondary); }
+.fbar.f2 { background: var(--uuif-surface-primary); }
+.fbar.f3 { background: var(--uuif-fill-orange-x-darker); }
+.fbar.f4 { background: var(--uuif-brand-red); }
+.fn   { font: 600 12px/1 var(--uuif-font-family); color: #fff; font-variant-numeric: tabular-nums; }
+.flab { font: 400 12px/1 var(--uuif-font-family); color: var(--uuif-text-secondary); white-space: nowrap; }
+.funnel-ft { padding-top: var(--uuif-sp-3); border-top: 1px solid var(--uuif-border-transparent); font: 600 13px/1 var(--uuif-font-family); color: var(--uuif-brand-green); }
+
+/* ── REPORT STATS ───────────────────────────────────────────────── */
+.rpt-stats { display: flex; gap: var(--uuif-sp-5); flex-wrap: wrap; margin-bottom: var(--uuif-sp-5); }
+.rpt-stat  { flex: 1; min-width: 100px; background: var(--uuif-surface-container); border: 1px solid var(--uuif-border-tertiary); border-radius: var(--uuif-radius-6); padding: var(--uuif-sp-5); }
+.rpt-stat .n    { font: 700 16px/1 var(--uuif-font-family); color: var(--uuif-text-highlight); }
+.rpt-stat .n.g  { color: var(--uuif-brand-green); }
+.rpt-stat .u    { font-size: 18px; }
+.rpt-stat .l    { font: 400 12px/1.4 var(--uuif-font-family); color: var(--uuif-text-secondary); margin-top: var(--uuif-sp-2); }
+
+/* ── TICKET THREAD ──────────────────────────────────────────────── */
+.tnote         { padding: var(--uuif-sp-4); margin-bottom: var(--uuif-sp-3); border-radius: var(--uuif-radius-6); }
+.tnote--mss    { background: var(--uuif-fill-blue-lightest); }
+.tnote--partner { background: var(--uuif-surface-model); }
+.tnote-meta    { font-size: 12px; color: var(--uuif-text-secondary); margin-bottom: var(--uuif-sp-2); }
+.tnote-meta strong { color: var(--uuif-text-primary); }
+.tnote-text    { font-size: 13px; color: var(--uuif-text-primary); line-height: 1.6; white-space: pre-wrap; }
+.treply        { margin-top: var(--uuif-sp-5); border-top: 1px solid var(--uuif-border-transparent); padding-top: var(--uuif-sp-5); }
+.treply-label  { font: 600 13px/1 var(--uuif-font-family); color: var(--uuif-text-primary); margin-bottom: var(--uuif-sp-3); }
+.treply-actions { display: flex; gap: var(--uuif-sp-3); justify-content: flex-end; margin-top: var(--uuif-sp-3); }
+
+/* ── FILTER BAR ─────────────────────────────────────────────────── */
+.filter-bar {
+  display: flex; align-items: center; flex-wrap: wrap; gap: var(--uuif-sp-3);
+  padding: var(--uuif-sp-3) var(--uuif-sp-4);
+  border-top: 1px solid var(--uuif-border-primary);
+  background: var(--uuif-surface-container);
+  margin-bottom: var(--uuif-sp-4);
+}
+.filter-label { font-size: 12px; color: var(--uuif-text-secondary); }
+.filter-push  { margin-left: auto; }
+.fpill.is-on  { background: var(--uuif-surface-selected); border-color: var(--uuif-border-primary); color: var(--uuif-text-hover); font-weight: 600; }
+
+/* ── DEVICE META GRID ───────────────────────────────────────────── */
+.dev-meta-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(160px,1fr)); gap: var(--uuif-sp-4); margin-bottom: var(--uuif-sp-5); }
+.dev-meta-item { background: var(--uuif-surface-container); border: 1px solid var(--uuif-border-tertiary); border-radius: var(--uuif-radius-6); padding: var(--uuif-sp-4); }
+.dev-meta-label { font: 600 12px/1 var(--uuif-font-family); text-transform: uppercase; color: var(--uuif-text-secondary); margin-bottom: var(--uuif-sp-2); }
+.dev-meta-val   { font: 600 14px/1 var(--uuif-font-family); color: var(--uuif-text-primary); }
+.dev-meta-val.ok { color: var(--uuif-brand-green); }
+
+/* ── BACK ROW ───────────────────────────────────────────────────── */
+.back-row { display: flex; align-items: center; gap: var(--uuif-sp-3); margin-bottom: var(--uuif-sp-5); }
+.back-row h1 { font: 600 18px/1 var(--uuif-font-family); color: var(--uuif-text-highlight); }
+
+/* ── PAGINATION ─────────────────────────────────────────────────── */
+.uuif-pagination { display: flex; justify-content: space-between; align-items: center; padding: 8px var(--uuif-sp-4); font-size: 13px; border-top: 1px solid var(--uuif-border-transparent); }
+
+/* ── UTILITIES ──────────────────────────────────────────────────── */
+.num     { font-variant-numeric: tabular-nums; }
+.nowrap  { white-space: nowrap; }
+.muted   { color: var(--uuif-text-secondary); }
+.bold    { font-weight: 700; }
+.small   { font-size: 12px; }
+.mb-3    { margin-bottom: var(--uuif-sp-3); }
+.mb-4    { margin-bottom: var(--uuif-sp-4); }
+.mb-5    { margin-bottom: var(--uuif-sp-5); }
+.flex-row { display: flex; align-items: center; gap: var(--uuif-sp-3); }
+.flex-end { justify-content: flex-end; }
+.chip-row { display: flex; flex-wrap: wrap; gap: var(--uuif-sp-2); margin-top: var(--uuif-sp-2); }
+.w-full   { width: 100%; }
+</style>
+</head>
+<body>
+<style>
+section[data-page]        { display: block; }
+section[data-page][hidden]{ display: none !important; }
+</style>
+
+<div class="uuif-app">
+
+<!-- ══ NAV RAIL ══════════════════════════════════════════════ -->
+<nav class="uuif-nav-rail" role="navigation" aria-label="Primary navigation">
+
+  <a class="uuif-nav-logo" href="#overview" aria-label="SonicWall">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M12.1227 20C12.1227 20 2.99431 17.7929 0.540356 12.9647C-2.17057 7.58815 5.78338 5.61738 14.0378 5.14218C18.5187 4.89785 24 5.04253 24 5.04253C24 5.04253 11.3062 7.70796 6.98525 11.5997C2.86044 15.427 12.1227 20 12.1227 20Z" fill="#FF5D00"/></svg>
+  </a>
+
+  <a class="uuif-nav-item is-selected" href="#overview" data-nav="dashboard" title="MSS Dashboard">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9.55566 13.5009C10.0772 13.501 10.5 13.9237 10.5 14.4452V21.0556C10.5 21.5771 10.0772 22.0008 9.55566 22.0009H2.94434C2.42278 22.0008 2 21.5771 2 21.0556V14.4452C2 13.9237 2.42278 13.501 2.94434 13.5009H9.55566ZM21.0557 13.5009C21.5772 13.501 22 13.9237 22 14.4452V21.0556C22 21.5771 21.5772 22.0008 21.0557 22.0009H14.4443C13.9228 22.0008 13.5 21.5771 13.5 21.0556V14.4452C13.5 13.9237 13.9228 13.501 14.4443 13.5009H21.0557ZM16.793 0.843669C17.1835 0.453152 17.8165 0.453152 18.207 0.843669L23.1572 5.79289C23.5477 6.18341 23.5477 6.8174 23.1572 7.20793L18.207 12.1571C17.8165 12.5477 17.1835 12.5477 16.793 12.1571L11.8428 7.20793C11.4523 6.8174 11.4523 6.18341 11.8428 5.79289L16.793 0.843669ZM9.55566 2.0009C10.0772 2.00095 10.5 2.42367 10.5 2.94523V9.55558C10.5 10.0771 10.0772 10.5008 9.55566 10.5009H2.94434C2.42278 10.5008 2 10.0771 2 9.55558V2.94523C2 2.42367 2.42278 2.00095 2.94434 2.0009H9.55566Z" fill="currentColor"/></svg>
+  </a>
+
+  <a class="uuif-nav-item" href="#overview" data-nav="inventory" title="Inventory">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M19.8018 12.4785C20.0084 12.479 20.1768 12.6467 20.1768 12.8535V14.3428C20.5529 14.4865 20.9008 14.6883 21.208 14.9375L22.502 14.1924C22.6814 14.0892 22.911 14.1509 23.0146 14.3301L23.9883 16.0127C24.0915 16.1918 24.0298 16.4211 23.8506 16.5244L22.5576 17.2686C22.5884 17.4624 22.6055 17.6617 22.6055 17.8643C22.6054 18.0661 22.5882 18.2648 22.5576 18.458L23.8516 19.2041C24.0304 19.3077 24.0918 19.5368 23.9883 19.7158L23.0146 21.3994C22.9109 21.5781 22.6812 21.639 22.502 21.5361L21.208 20.79C20.9005 21.0395 20.5533 21.2419 20.1768 21.3857V22.876C20.1763 23.0824 20.0081 23.2505 19.8018 23.251H17.8525C17.6457 23.251 17.478 23.0827 17.4775 22.876V21.3857C17.1009 21.2419 16.7529 21.0396 16.4453 20.79L15.1523 21.5361C14.9731 21.6394 14.7435 21.5773 14.6396 21.3984L13.666 19.7158C13.5623 19.5366 13.6233 19.3075 13.8027 19.2041L15.0947 18.459C15.064 18.2655 15.0489 18.0664 15.0488 17.8643C15.0488 17.6617 15.0639 17.4624 15.0947 17.2686L13.8027 16.5244C13.6236 16.421 13.5625 16.1918 13.666 16.0127L14.6396 14.3301C14.7434 14.1508 14.9729 14.089 15.1523 14.1924L16.4453 14.9375C16.7529 14.688 17.1009 14.4866 17.4775 14.3428V12.8535C17.4775 12.6464 17.6454 12.4785 17.8525 12.4785H19.8018ZM17.2568 2C18.7717 2 20 3.22833 20 4.74316V11.4434C19.8829 11.4165 19.7611 11.4004 19.6357 11.4004H18.0166C17.1223 11.4004 16.3975 12.1242 16.3975 13.0166V13.665L15.834 13.3408C15.7795 13.3094 15.7234 13.2822 15.667 13.2578C15.1306 13.0255 14.5225 13.1062 14.0684 13.4375H4V14.9375H13.041L12.8125 15.332C12.3654 16.1049 12.6308 17.0929 13.4053 17.5391L13.9688 17.8643L13.4053 18.1885C12.7581 18.5613 12.468 19.3122 12.6504 20H2.74316C1.22833 20 0 18.7717 0 17.2568V4.74316C0 3.22833 1.22833 2 2.74316 2H17.2568ZM18.8271 16.249C17.9329 16.249 17.2071 16.9719 17.207 17.8643C17.2073 18.7564 17.933 19.4805 18.8271 19.4805C19.7209 19.48 20.446 18.7561 20.4463 17.8643C20.4462 16.9722 19.721 16.2495 18.8271 16.249ZM4 11.9375H16V10.4375H4V11.9375ZM4 8.9375H16V7.4375H4V8.9375Z" fill="currentColor"/></svg>
+  </a>
+
+  <a class="uuif-nav-item" href="#overview" data-nav="admin-settings" title="Admin Settings">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M19.8008 12.4785C20.0077 12.4788 20.1758 12.6466 20.1758 12.8535V14.3428C20.5521 14.4865 20.8997 14.6882 21.207 14.9375L22.501 14.1924C22.6804 14.0892 22.91 14.1509 23.0137 14.3301L23.9873 16.0127C24.091 16.1919 24.029 16.421 23.8496 16.5244L22.5567 17.2686C22.5875 17.4626 22.6045 17.6616 22.6045 17.8643C22.6045 18.0662 22.5873 18.2647 22.5567 18.458L23.8506 19.2041C24.0299 19.3075 24.091 19.5366 23.9873 19.7158L23.0137 21.3994C22.9098 21.5782 22.6802 21.6394 22.501 21.5361L21.207 20.79C20.8996 21.0395 20.5522 21.242 20.1758 21.3857V22.876C20.1754 23.0826 20.0074 23.2507 19.8008 23.251H17.8516C17.6448 23.2508 17.4769 23.0827 17.4766 22.876V21.3857C17.0998 21.2419 16.752 21.0397 16.4443 20.79L15.1514 21.5361C14.972 21.6392 14.7423 21.5775 14.6387 21.3984L13.665 19.7158C13.5614 19.5367 13.6226 19.3076 13.8018 19.2041L15.0938 18.459C15.063 18.2654 15.0479 18.0664 15.0479 17.8643C15.0479 17.6617 15.0629 17.4625 15.0938 17.2686L13.8018 16.5244C13.6228 16.421 13.5617 16.1918 13.665 16.0127L14.6387 14.3301C14.7424 14.1509 14.972 14.0892 15.1514 14.1924L16.4443 14.9375C16.7518 14.6881 17.1001 14.4865 17.4766 14.3428V12.8535C17.4766 12.6465 17.6446 12.4787 17.8516 12.4785H19.8008ZM10.4356 11.916C12.2447 11.916 14.4823 12.1325 16.4141 12.7881C16.4035 12.8628 16.3975 12.939 16.3975 13.0166V13.665L15.834 13.3418C15.7796 13.3104 15.7233 13.2822 15.667 13.2578C14.9225 12.9353 14.0379 13.2146 13.6221 13.9326L12.8125 15.332C12.3655 16.1047 12.6302 17.0927 13.4043 17.5391L13.9688 17.8643L13.4043 18.1885C12.9116 18.4724 12.6258 18.9763 12.5977 19.5039H0.261728L0.169932 19.0547C-0.125438 17.6245 0.0921139 16.4183 0.701182 15.4316C1.30198 14.4587 2.25069 13.7522 3.3252 13.2422C5.46341 12.2275 8.25932 11.9161 10.4356 11.916ZM18.8262 16.249C17.9321 16.2492 17.2061 16.972 17.2061 17.8643C17.2062 18.7564 17.9321 19.4803 18.8262 19.4805C19.7202 19.4802 20.4452 18.7564 20.4453 17.8643C20.4453 16.9721 19.7202 16.2493 18.8262 16.249ZM10.4356 0.0664062C13.1297 0.0665727 15.3163 2.24622 15.3164 4.9375C15.3164 7.62889 13.1297 9.80843 10.4356 9.80859C7.7414 9.80841 5.55567 7.62888 5.55567 4.9375C5.5558 2.24623 7.74148 0.0665943 10.4356 0.0664062Z" fill="currentColor"/></svg>
+  </a>
+
+  <div class="uuif-nav-divider"></div>
+
+  <a class="uuif-nav-item" href="#fw-list" data-nav="firewalls" title="Firewalls — MPSS">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M10.3662 5.9248C9.63588 6.89856 8.47473 9.47839 9.67185 12.0068C11.1685 15.1675 14.221 19.72 7.69724 22.999C8.25147 20.912 8.51029 19.6178 6.43943 17.2881C6.29708 17.1279 6.1678 16.9619 6.05076 16.791C6.03014 16.8102 6.0112 16.8312 5.99021 16.8496C5.94746 16.8872 5.90616 16.9254 5.86521 16.9629C5.58716 16.3661 5.40885 15.7433 5.32224 15.1084C4.62752 12.0344 6.7465 8.17775 10.3662 5.9248ZM3.07224 2C4.95467 3.38438 6.21639 5.41962 6.92576 7.5625C5.92104 8.72537 5.15828 10.0442 4.71091 11.4209C4.03413 13.5039 4.07623 15.7493 5.13279 17.7354C3.83107 19.3482 4.04007 20.7934 4.19724 21.876C4.21379 21.99 4.23056 22.1003 4.24412 22.2061C-2.57163 18.0882 0.342993 13.5758 2.56541 10.1357C2.78007 9.80346 2.98829 9.48088 3.18064 9.16992C4.92729 6.34602 3.83621 3.21366 3.07224 2ZM15.5 21.6895H11.9345C13.0548 20.314 13.5574 18.9252 13.6006 17.5479H15.5V21.6895ZM21.7129 20.6895C21.7129 21.2416 21.2649 21.6892 20.7129 21.6895H16.5351V17.5479H21.7129V20.6895ZM21.7129 16.5117H13.5517C13.4053 15.3878 12.9777 14.3414 12.4795 13.4062H21.7129V16.5117ZM18.3281 5.13574C20.7752 5.20328 23.7645 5.56221 23.7832 5.56445C23.7686 5.56626 16.6924 6.44019 14.1338 8.43848C11.6332 10.3919 16.459 13.4062 16.459 13.4062C16.459 13.4062 11.3951 12.6032 10.3222 9.78223C9.12114 6.62416 13.773 5.01024 18.3281 5.13574ZM20.7129 10.2988C21.2644 10.2991 21.712 10.7474 21.7129 11.2988V12.3701H15.5V10.2988H20.7129Z" fill="currentColor"/></svg>
+  </a>
+
+  <a class="uuif-nav-item" href="#overview" data-nav="access-points-switches" title="Access Points & Switches">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M21.2051 12.9235C22.1964 12.9236 23.0214 13.7682 23.0215 14.7399V19.4294C23.0215 20.4207 22.1768 21.2467 21.2051 21.2467H16.5146C15.5234 21.2465 14.6982 20.4009 14.6982 19.4294V14.7399C14.6983 13.7487 15.5431 12.9238 16.5146 12.9235H21.2051ZM15.3516 18.9469C15.2988 18.9771 15.2726 19.0224 15.2725 19.0827C15.2725 19.1432 15.2987 19.1891 15.3516 19.2194L17.5889 20.1735V19.446H18.8604V18.7194H17.5889V17.9928L15.3516 18.9469ZM20.1318 17.2663H18.8604V17.9928H20.1318V18.7194L22.3682 17.7663C22.4211 17.736 22.4473 17.6901 22.4473 17.6295C22.4472 17.5692 22.421 17.524 22.3682 17.4938L20.1318 16.5397V17.2663ZM15.3516 16.404C15.2988 16.4342 15.2725 16.4794 15.2725 16.5397C15.2725 16.6002 15.2986 16.6461 15.3516 16.6764L17.5889 17.6295V16.903H18.8604V16.1764H17.5889V15.4499L15.3516 16.404ZM20.1318 14.7233H18.8604V15.4499H20.1318V16.1764L22.3682 15.2233C22.4211 15.193 22.4473 15.1471 22.4473 15.0866C22.4472 15.0261 22.421 14.9811 22.3682 14.9508L20.1318 13.9967V14.7233Z" fill="currentColor"/><path d="M12.0029 12.7516C12.1865 12.7516 12.3637 12.8222 12.4971 12.9499C12.6304 13.0774 12.7104 13.2518 12.7207 13.4372L12.8779 16.8463H13.7734V19.3864H7.27246C6.37466 19.3864 5.71587 18.4723 5.71582 17.5475V16.8463H11.1289L11.2861 13.4372C11.2965 13.2518 11.3765 13.0774 11.5098 12.9499C11.643 12.8223 11.8195 12.7517 12.0029 12.7516Z" fill="currentColor"/><path d="M3.375 2.24967C3.6513 1.94123 4.12506 1.91494 4.43359 2.19107C4.74196 2.46732 4.76816 2.94113 4.49219 3.24967C3.23647 4.65152 2.50017 6.40504 2.5 8.29849C2.50001 10.1921 3.23651 11.9454 4.49219 13.3473C4.76854 13.6559 4.74212 14.1305 4.43359 14.4069C4.12508 14.6832 3.65136 14.6568 3.375 14.3483C1.89653 12.6977 1.00001 10.5955 1 8.29849C1.00018 6.00165 1.89656 3.90017 3.375 2.24967Z" fill="currentColor"/><path d="M5.44727 4.0983C5.72462 3.79084 6.19924 3.76636 6.50684 4.04361C6.81392 4.32093 6.83846 4.79471 6.56152 5.10221C5.74206 6.01136 5.27547 7.11807 5.27539 8.29947C5.27541 9.48083 5.74218 10.5876 6.56152 11.4967C6.83849 11.8043 6.81412 12.279 6.50684 12.5563C6.19925 12.8335 5.72462 12.809 5.44727 12.5016C4.40913 11.3498 3.77541 9.89404 3.77539 8.29947C3.77547 6.7051 4.4093 5.24998 5.44727 4.0983Z" fill="currentColor"/><path d="M11.9512 5.97232C12.6029 6.28321 14.128 7.09681 14.1436 7.10513C14.1436 7.10513 14.1436 7.7239 14.1436 8.40787C12.865 8.26833 10.9726 8.10491 10.4111 8.97721C9.76501 9.98117 10.9989 11.0718 12.4531 11.0719C12.0329 10.732 10.8492 10.0428 11.6592 9.43814C12.3853 8.9271 13.2908 8.73784 14.1436 8.60318V9.84732C14.1432 9.94733 14.1328 10.0474 14.1133 10.1452C14.093 10.2473 14.0634 10.3474 14.0244 10.443C13.9857 10.539 13.9416 10.6329 13.8926 10.7233C13.8452 10.8107 13.7925 10.8949 13.7354 10.9753C13.6782 11.0484 13.6155 11.1234 13.5479 11.1999C13.479 11.2778 13.4055 11.3508 13.3271 11.4176C13.2481 11.4908 13.1713 11.5576 13.0977 11.6188C13.0238 11.6785 12.9532 11.733 12.8857 11.7819C12.8182 11.8308 12.7502 11.8785 12.6826 11.9245C12.6147 11.9705 12.5434 12.0155 12.4697 12.0583C12.3963 12.1009 12.3341 12.1363 12.2832 12.1637C12.2422 12.1867 12.1997 12.2066 12.1562 12.2233C12.1303 12.2403 12.1029 12.2558 12.0752 12.2692C12.0498 12.2814 12.0285 12.2904 12.0117 12.2965C11.9965 12.3021 11.9806 12.3067 11.9648 12.3102C11.9521 12.3128 11.9387 12.3138 11.9258 12.3141H11.9219C11.9091 12.3138 11.8963 12.3128 11.8838 12.3102C11.868 12.3067 11.8521 12.3021 11.8369 12.2965C11.8201 12.2904 11.7989 12.2814 11.7734 12.2692C11.7458 12.2558 11.7183 12.2402 11.6924 12.2233C11.6489 12.2066 11.6064 12.1866 11.5654 12.1637C11.5144 12.1362 11.4515 12.101 11.3779 12.0583C11.3039 12.0155 11.2326 11.9705 11.165 11.9245C11.0976 11.8785 11.0304 11.8307 10.9629 11.7819C10.895 11.7352 10.8237 11.6808 10.75 11.6188C10.6764 11.5569 10.5998 11.49 10.5205 11.4176C10.4422 11.3508 10.3686 11.2778 10.2998 11.1999C10.2315 11.1227 10.1688 11.0477 10.1123 10.9753C10.0551 10.8949 10.0024 10.8107 9.95508 10.7233C9.90606 10.6329 9.86201 10.539 9.82324 10.443C9.78424 10.3474 9.75461 10.2473 9.73438 10.1452C9.71483 10.0474 9.7044 9.94734 9.7041 9.84732V7.10513C9.71255 7.10069 11.282 6.27476 11.9512 5.97232Z" fill="currentColor"/><path d="M19.4141 2.19107C19.7225 1.91494 20.1963 1.94142 20.4727 2.24967C21.951 3.90015 22.8475 6.00172 22.8477 8.29849C22.8477 9.61295 22.5526 10.8629 22.0244 12.0016C21.9988 12.0006 21.9731 11.9977 21.9473 11.9977H20.3369C20.9849 10.8815 21.3476 9.62485 21.3477 8.29849C21.3475 6.40504 20.6112 4.65152 19.3555 3.24967C19.0796 2.94113 19.1057 2.46731 19.4141 2.19107Z" fill="currentColor"/><path d="M17.3418 4.04361C17.6495 3.76653 18.1241 3.79071 18.4014 4.0983C19.4393 5.24995 20.0732 6.70518 20.0732 8.29947C20.0732 9.66985 19.6041 10.9372 18.8135 11.9977H17.0967C17.097 11.819 17.1582 11.6398 17.2871 11.4967C18.1064 10.5876 18.5732 9.48077 18.5732 8.29947C18.5732 7.11818 18.1064 6.01131 17.2871 5.10221C17.01 4.79465 17.0345 4.32096 17.3418 4.04361Z" fill="currentColor"/><path d="M7.5293 5.93814C7.81134 5.63485 8.28553 5.61804 8.58887 5.90006C8.89193 6.18212 8.90985 6.65636 8.62793 6.95963C8.24198 7.37477 8.04985 7.835 8.0498 8.29849C8.04987 8.76191 8.24208 9.22228 8.62793 9.63736C8.90972 9.94073 8.89213 10.4159 8.58887 10.6979C8.28557 10.9796 7.81127 10.9619 7.5293 10.6588C6.93167 10.016 6.54988 9.20373 6.5498 8.29849C6.54985 7.39319 6.9316 6.58104 7.5293 5.93814Z" fill="currentColor"/><path d="M15.2588 5.90006C15.5622 5.61804 16.0373 5.63479 16.3193 5.93814C16.9169 6.581 17.2988 7.39332 17.2988 8.29849C17.2988 9.20367 16.9169 10.016 16.3193 10.6588C16.0374 10.9621 15.5622 10.9797 15.2588 10.6979C14.9555 10.4159 14.9387 9.94069 15.2207 9.63736C15.6065 9.22231 15.7988 8.76186 15.7988 8.29849C15.7988 7.83512 15.6064 7.37469 15.2207 6.95963C14.9388 6.65642 14.9559 6.18214 15.2588 5.90006Z" fill="currentColor"/></svg>
+  </a>
+
+  <a class="uuif-nav-item" href="#capture-client" data-nav="capture" title="Capture Client">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M21.5 11.8281C21.5 14.5058 20.2318 17.0252 18.082 18.6191L12.1719 22.999C10.0114 21.2879 6.26588 17.669 9.44336 15.1475C12.1074 13.0974 17.5329 11.7577 21.5 11.0059V11.8281ZM21.5 9.74121C19.9996 9.60355 18.3281 9.47395 16.7764 9.4082C9.72146 9.13166 2.77789 10.066 2.86035 14.2715C2.62398 13.4883 2.5 12.6658 2.5 11.8281V2L8.03711 2.61523C10.671 2.9081 13.329 2.90812 15.9629 2.61523L21.5 2V9.74121Z" fill="currentColor"/></svg>
+  </a>
+
+  <a class="uuif-nav-item" href="#overview" data-nav="capture-client-mdr" title="Capture Client MDR">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M18.0164 12.4229L18.3524 12.5684C19.1964 12.9272 20.1001 13.2636 20.8592 13.5244L20.9442 13.5537C21.1769 13.6243 21.3822 13.7546 21.5418 13.9336L20.5682 14.7998H20.5702L21.5418 13.9336C21.6988 14.1097 21.8057 14.3265 21.8534 14.5693C21.9204 14.942 21.9525 15.3094 21.9647 15.7686C22.8372 15.7766 23.5592 15.8026 23.9998 15.8447C23.9796 15.8497 23.1218 16.0615 21.9705 16.3574V16.9619L21.9793 17.5273L21.783 17.6416C21.2275 19.7419 20.034 21.4387 18.2205 22.7148L17.9569 22.8936L17.575 23.1465L17.1922 22.8945C16.6807 22.5579 16.2164 22.1888 15.7977 21.79C13.8216 20.9205 12.5911 19.9235 12.1385 18.709C11.77 17.7197 12.2275 17.0707 13.1707 16.6416L13.1717 16.2998C13.1727 15.6953 13.1858 15.3126 13.2323 14.9385L13.2909 14.5586C13.3251 14.3844 13.3937 14.219 13.492 14.0732L13.5995 13.9346C13.7187 13.8008 13.8643 13.6929 14.0155 13.6221L14.1678 13.5635L14.6727 13.3887C15.174 13.2108 15.7184 13.007 16.2537 12.791L16.785 12.5713L17.1209 12.4248L17.5692 12.2227L18.0164 12.4229ZM20.4666 16.75C18.5071 17.2694 16.3785 17.8699 15.9422 18.1348L15.908 18.1553C15.6624 18.3368 15.4794 18.5199 15.3485 18.7012C15.854 19.7193 16.5908 20.5941 17.5741 21.3291C18.982 20.2731 19.8922 18.9236 20.3328 17.2578L20.4666 16.75ZM9.63461 11.9805C11.1651 11.9805 13.0265 12.1476 14.701 12.6387L14.4412 12.7334L13.9393 12.9082C13.6151 13.0114 13.3125 13.2121 13.0809 13.4717C12.8705 13.7076 12.7203 13.9906 12.6395 14.2939L12.6082 14.4248L12.6063 14.4355C12.5275 14.8729 12.4944 15.2402 12.4823 15.7432L12.4764 16.2988L12.4754 16.4902C11.5871 17.0619 11.295 17.8905 11.7821 18.9092C11.7987 18.944 11.8175 18.9783 11.8358 19.0127H0.206872L0.120934 18.5967C-0.152866 17.2711 0.0495104 16.1527 0.614098 15.2383C1.17081 14.3369 2.04922 13.6825 3.04476 13.21C5.02628 12.2695 7.61777 11.9805 9.63461 11.9805ZM17.3817 13.9473L17.3719 13.9512C16.638 14.2632 15.8645 14.557 15.1746 14.8018L14.7459 14.9502C14.6943 15.2739 14.6756 15.5783 14.6727 16.1914C15.5131 16.0253 16.4933 15.9286 17.5223 15.8691L17.9784 15.8447C18.8146 15.8056 19.6658 15.782 20.4637 15.7715V15.749C20.4536 15.4263 20.4309 15.1803 20.3953 14.9512L20.369 14.9424V14.9414C19.5856 14.6722 18.6487 14.3248 17.7655 13.9492L17.7557 13.9453L17.5702 13.8643L17.3817 13.9473ZM9.63461 1C12.1313 1.00009 14.158 3.02051 14.158 5.51465C14.1578 8.00861 12.1312 10.0282 9.63461 10.0283C7.13807 10.0281 5.11236 8.00856 5.11215 5.51465C5.11215 3.02056 7.13794 1.00017 9.63461 1Z" fill="currentColor"/></svg>
+  </a>
+
+  <a class="uuif-nav-item" href="#overview" data-nav="endpoint-security" title="Endpoint Security">
+    <svg width="24" height="24" viewBox="0 0 26 24" fill="none"><path d="M5.59473 15.3574C5.78607 15.9374 6.03906 16.4923 6.35156 17.0107V17.3574H3.18848V19.2959H3.09766C3.38823 19.5496 3.57312 19.9219 3.57324 20.3379C3.57298 21.1023 2.95297 21.7226 2.18848 21.7227C1.42403 21.7225 0.803974 21.1023 0.803711 20.3379C0.803832 19.9222 0.988135 19.5496 1.27832 19.2959H1.18848V15.3574H5.59473ZM24.2344 19.2959H24.1445C24.4347 19.5496 24.619 19.9222 24.6191 20.3379C24.6189 21.1023 23.9988 21.7225 23.2344 21.7227C22.4698 21.7227 21.8499 21.1024 21.8496 20.3379C21.8497 19.9221 22.0339 19.5496 22.3242 19.2959H22.2344V17.3574H19.0713V17.0029C19.3816 16.4868 19.6329 15.9345 19.8232 15.3574H24.2344V19.2959ZM1.38477 10.1592C1.91681 10.1593 2.3776 10.4602 2.60938 10.9004H5.17383V12.7529C5.17383 12.8022 5.17687 12.8513 5.17773 12.9004H1.8877V12.832C1.73161 12.893 1.56246 12.9287 1.38477 12.9287C0.620118 12.9287 8.76159e-05 12.3086 0 11.5439C8.45398e-05 10.7793 0.620116 10.1592 1.38477 10.1592ZM24.0391 10.1445C24.8036 10.1445 25.4236 10.7648 25.4238 11.5293C25.4238 12.294 24.8038 12.9141 24.0391 12.9141C23.8614 12.9141 23.6922 12.8793 23.5361 12.8184V12.9004H20.2402C20.2411 12.8513 20.2441 12.8022 20.2441 12.7529V10.9004H22.8066C23.0359 10.4523 23.5012 10.1446 24.0391 10.1445ZM2.18848 2.07812C2.95298 2.07818 3.573 2.69746 3.57324 3.46191C3.57324 3.83268 3.42578 4.16845 3.18848 4.41699V6.44336H5.22949C5.19316 6.57557 5.17383 6.71318 5.17383 6.85156V8.44336H1.18848V4.41797C0.950881 4.16938 0.803711 3.83294 0.803711 3.46191C0.803955 2.69749 1.42402 2.07824 2.18848 2.07812ZM23.2344 2.07812C23.9988 2.07824 24.6189 2.69749 24.6191 3.46191C24.6191 3.83291 24.4719 4.16939 24.2344 4.41797V8.44336H20.2441V6.85156C20.2441 6.71316 20.2248 6.57559 20.1885 6.44336H22.2344V4.41797C21.9968 4.16938 21.8496 3.83296 21.8496 3.46191C21.8499 2.69742 22.4698 2.07812 23.2344 2.07812Z" fill="currentColor"/><path d="M11.8396 3.3329C12.3858 3.03236 13.0366 3.03217 13.5828 3.3329L19.0242 6.32997C19.2076 6.43099 19.323 6.63183 19.323 6.85048V12.7518C19.323 15.1276 18.1886 17.3426 16.3074 18.6425C15.3013 19.3376 12.7107 20.7401 12.7107 20.7401C12.6801 20.7236 10.1141 19.3335 9.11401 18.6425C7.23282 17.3426 6.09842 15.1276 6.09839 12.7518V6.85048C6.09839 6.63183 6.21378 6.43099 6.39722 6.32997L11.8396 3.3329Z" fill="currentColor"/></svg>
+  </a>
+
+  <a class="uuif-nav-item" href="#cloud-avanan" data-nav="cloud" title="Cloud Secure Edge / Avanan">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M0.985987 13.9316C3.91963 11.0074 13.6121 11.5244 16.4997 12.1182C12.9806 12.6704 6.49964 13.6928 4.99966 16.8428C3.64762 19.6824 5.94446 22.5485 7.31021 23.668C0.98562 21.1778 -1.58221 17.1614 0.985987 13.9316ZM9.49966 2.66797C11.0092 2.66804 12.377 3.34679 13.3708 4.44531C14.0044 4.06506 14.7298 3.84968 15.4997 3.84961C17.9847 3.84976 19.9995 6.09677 19.9997 8.86914C19.9997 8.92031 19.9971 8.97166 19.9958 9.02246C22.2632 9.36954 24.0006 11.3289 24.0006 13.6934C24.0004 16.3026 21.8844 18.4178 19.275 18.418H5.72524C5.63806 17.9291 5.74203 17.4837 5.99966 17.1367C8.02593 14.409 14.4998 13.1681 21.4997 12.1182C15.0041 10.2995 5.41476 10.0568 1.23013 12.2363C1.66624 10.8899 2.69023 9.80807 3.99966 9.29395V8.80371C3.99975 5.41515 6.46232 2.66819 9.49966 2.66797Z" fill="currentColor"/></svg>
+  </a>
+
+  <div class="uuif-nav-divider"></div>
+
+  <a class="uuif-nav-item" href="#ask-sami" data-nav="sami" title="Ask SAMI">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.1841 1C13.2132 1 14.0473 1.83422 14.0474 2.86328C14.0474 3.55268 13.6723 4.15331 13.1157 4.47559V5.80859H14.979C18.066 5.80868 20.5685 8.31156 20.5689 11.3984V13.2617C20.5689 16.3489 18.0662 18.8515 14.979 18.8516H11.4858L6.65088 22.957C6.55688 23.0368 6.39892 22.9087 6.45264 22.7979C7.00529 21.6622 7.92017 19.2044 6.28467 17.9102C5.71421 17.4587 5.1582 16.9868 4.75147 16.3838C4.10321 15.3395 3.79932 14.3359 3.79932 13.2617V11.3984C3.79938 10.9631 3.84965 10.5395 3.94385 10.1328C2.99418 9.53346 1.5612 8.41386 1.12745 6.90137C-0.156616 2.42539 8.63462 3.87495 10.7866 4.72559C10.7613 4.72078 6.12349 3.84599 4.26514 6.63281C3.54797 7.70856 3.54687 8.95816 4.00245 9.90332C4.65659 7.54249 6.82014 5.80865 9.38916 5.80859H11.2524V4.47461C10.6962 4.15225 10.3208 3.55246 10.3208 2.86328C10.3208 1.83425 11.1551 1.00005 12.1841 1ZM13.9937 14.4336C13.8681 14.0839 13.5629 13.9416 13.312 14.1162C12.602 14.6112 11.7661 14.6112 11.0562 14.1162C10.8053 13.9418 10.5 14.0841 10.3745 14.4336C10.2492 14.7834 10.3513 15.2087 10.6021 15.3838C11.5981 16.0783 12.771 16.0783 13.7671 15.3838C14.0176 15.2085 14.119 14.7833 13.9937 14.4336ZM8.45752 9.38184C7.9433 9.38194 7.52626 9.79931 7.52588 10.3135V12.1768C7.52588 12.6912 7.94307 13.1083 8.45752 13.1084C8.97199 13.1083 9.38916 12.6912 9.38916 12.1768V10.3135C9.38879 9.7993 8.97176 9.38192 8.45752 9.38184ZM15.9106 9.38184C15.3965 9.38203 14.9794 9.79937 14.979 10.3135V12.1768C14.979 12.6912 15.3963 13.1082 15.9106 13.1084C16.4251 13.1083 16.8423 12.6912 16.8423 12.1768V10.3135C16.8419 9.7993 16.4249 9.38192 15.9106 9.38184Z" fill="currentColor"/><path d="M2.86768 16.8389H2.08741C1.4892 16.8389 1.0044 16.3541 1.0044 15.7559V10.4688C1.00453 9.87065 1.48928 9.38574 2.08741 9.38574H2.86768V16.8389Z" fill="currentColor"/><path d="M22.2808 9.38574C22.8789 9.38574 23.3636 9.87065 23.3638 10.4688V15.7559C23.3638 16.3541 22.879 16.8389 22.2808 16.8389H21.5005V9.38574H22.2808Z" fill="currentColor"/></svg>
+  </a>
+
+  <div class="uuif-nav-spacer"></div>
+  <div class="uuif-nav-divider"></div>
+
+  <a class="uuif-nav-item" href="#overview" data-nav="download-center" title="Download Center">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M11.2499 0H12.7499V6.75H16.4999L11.9999 12.75L7.49995 6.75H11.2499V0ZM1.677 12.6615L7.77267 9.61364L8.68743 10.8333L3.35409 13.5L12 17.8229L20.6459 13.5L15.3126 10.8333L16.2273 9.61364L24 13.5V18L12 24L0 18V13.5L1.67705 12.6615H1.677Z" fill="currentColor"/></svg>
+  </a>
+
+  <a class="uuif-nav-item" href="#support" data-nav="support" title="Support Resources">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12.0002 1.0332C16.4759 1.03363 20.1387 4.50646 20.4455 8.9043C20.6694 8.88697 20.8998 8.90546 21.1291 8.9668C22.9015 9.44185 23.9535 11.2637 23.4787 13.0361L23.0627 14.5889C22.6747 16.0365 21.3883 17.0034 19.964 17.0508C19.1653 18.8898 17.4798 20.2737 15.3947 20.6133L14.8703 20.6982C14.7006 22.1351 13.4816 23.25 11.9992 23.25L11.8498 23.2461C10.3699 23.1707 9.18336 21.9839 9.10856 20.5039L9.10465 20.3555C9.10473 18.7571 10.4008 17.4611 11.9992 17.4609L12.1476 17.4648C13.2764 17.5219 14.2327 18.2266 14.6574 19.2139L15.1545 19.1328C16.6221 18.8936 17.8264 17.9659 18.467 16.7139C17.711 16.2569 17.313 15.3414 17.5529 14.4453L18.6349 10.4062C18.7035 10.1504 18.8198 9.92011 18.9689 9.71973V9.50195C18.9689 5.6536 15.8484 2.53364 12.0002 2.5332C8.15153 2.5332 5.03141 5.65333 5.03141 9.50195V9.72266C5.17937 9.92234 5.29416 10.1516 5.36246 10.4062L6.44547 14.4453C6.73624 15.5314 6.09109 16.6483 5.00504 16.9395C3.23264 17.4139 1.40964 16.3613 0.93473 14.5889L0.518715 13.0361C0.0441605 11.2638 1.0971 9.44188 2.8693 8.9668C3.09873 8.90537 3.32984 8.88692 3.55387 8.9043C3.86059 4.50617 7.52408 1.0332 12.0002 1.0332ZM11.9992 18.9609C11.2292 18.9611 10.6047 19.5855 10.6047 20.3555C10.6047 21.1255 11.2292 21.7499 11.9992 21.75C12.7693 21.75 13.3937 21.1256 13.3937 20.3555C13.3936 19.5854 12.7692 18.961 11.9992 18.9609ZM3.257 10.415C2.28497 10.6758 1.70754 11.6763 1.96793 12.6484L2.38395 14.2012C2.64458 15.1733 3.64512 15.7505 4.61735 15.4902C4.9031 15.4134 5.0727 15.1189 4.99625 14.833L3.91422 10.7939C3.8372 10.5084 3.54278 10.3386 3.257 10.415ZM20.7404 10.415C20.4548 10.3391 20.1611 10.5086 20.0841 10.7939L19.0021 14.833C18.9257 15.1188 19.0954 15.4133 19.381 15.4902C20.3533 15.7507 21.3527 15.1733 21.6134 14.2012L22.0295 12.6484C22.29 11.676 21.7128 10.6756 20.7404 10.415Z" fill="currentColor"/></svg>
+  </a>
+
+</nav><!-- /nav-rail -->
+
+<!-- SUBNAV -->
+<aside class="uuif-subnav" role="navigation" aria-label="Section navigation">
+  <div class="uuif-subnav-hd">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12.1227 20C12.1227 20 2.99431 17.7929 0.540356 12.9647C-2.17057 7.58815 5.78338 5.61738 14.0378 5.14218C18.5187 4.89785 24 5.04253 24 5.04253C24 5.04253 11.3062 7.70796 6.98525 11.5997C2.86044 15.427 12.1227 20 12.1227 20Z" fill="#FF5D00"/></svg>
+    <div>
+      <div class="uuif-subnav-brand">SonicWall</div>
+      <div class="uuif-subnav-product">MSS Dashboard</div>
+    </div>
+  </div>
+  <div class="uuif-subnav-tab-title" id="subnav-tab-title">MSS Dashboard</div>
+  <nav class="uuif-subnav-nav">
+
+    <!-- dashboard group -->
+    <div id="snav-dashboard">
+      <div class="uuif-subnav-section">MSS Overview</div>
+      <a class="uuif-subnav-link is-active" href="#overview"  data-subnav="overview">Overview</a>
+      <a class="uuif-subnav-link"            href="#coverage" data-subnav="coverage">Coverage</a>
+      <div class="uuif-subnav-section">SOC Activity</div>
+      <a class="uuif-subnav-link" href="#alerts"  data-subnav="alerts">Alerts</a>
+      <a class="uuif-subnav-link" href="#tickets" data-subnav="tickets">Tickets</a>
+      <div class="uuif-subnav-section">Manage</div>
+      <a class="uuif-subnav-link" href="#reports"  data-subnav="reports">Reports</a>
+      <a class="uuif-subnav-link" href="#contacts" data-subnav="contacts">Contacts</a>
+    </div>
+
+    <!-- firewalls group -->
+    <div id="snav-firewalls" hidden>
+      <div class="uuif-subnav-section">MPSS</div>
+      <a class="uuif-subnav-link is-active" href="#fw-list" data-subnav="fw-list">Firewall Units</a>
+    </div>
+
+    <!-- capture group -->
+    <div id="snav-capture" hidden>
+      <div class="uuif-subnav-section">Capture Client</div>
+      <a class="uuif-subnav-link is-active" href="#capture-client" data-subnav="capture-client">Dashboard</a>
+    </div>
+
+    <!-- cloud group -->
+    <div id="snav-cloud" hidden>
+      <div class="uuif-subnav-section">Cloud Security</div>
+      <a class="uuif-subnav-link is-active" href="#cloud-avanan" data-subnav="cloud-avanan">Avanan</a>
+    </div>
+
+    <!-- network group -->
+    <div id="snav-network" hidden>
+      <div class="uuif-subnav-section">MDR Network</div>
+      <a class="uuif-subnav-link is-active" href="#network-mdr" data-subnav="network-mdr">Network</a>
+    </div>
+
+    <!-- sami group -->
+    <div id="snav-sami" hidden>
+      <div class="uuif-subnav-section">AI Assistant</div>
+      <a class="uuif-subnav-link is-active" href="#ask-sami" data-subnav="ask-sami">Ask SAMI</a>
+    </div>
+
+    <!-- support group -->
+    <div id="snav-support" hidden>
+      <div class="uuif-subnav-section">Resources</div>
+      <a class="uuif-subnav-link is-active" href="#support" data-subnav="support">Support Resources</a>
+    </div>
+
+  </nav>
+</aside><!-- /subnav -->
+
+<!-- ══ MAIN ═══════════════════════════════════════════════════ -->
+<div class="uuif-main">
+
+  <!-- ── TOPBAR ─────────────────────────────────────────────── -->
+  <header class="uuif-topbar" role="banner">
+
+    <div class="uuif-breadcrumb">
+      <span>Northwind Security Group</span>
+      <span class="uuif-crumb-sep">›</span>
+      <span id="crumb-cur" class="cur">MSS Overview</span>
+    </div>
+
+    <!-- Scope Selector -->
+    <div class="uuif-scope-selector">
+      <div class="uuif-scope-trigger" id="scope-trigger" role="combobox" aria-haspopup="listbox" aria-expanded="false">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.4"/><path d="M10.5 10.5L13.5 13.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        <div class="uuif-scope-divider"></div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12C1 5.92487 5.92487 1 12 1ZM12 14C9.75184 14 6.75369 14.4794 5.1416 16.1191C6.54105 18.4442 9.08854 20 12 20C14.9113 20 17.4579 18.444 18.8574 16.1191C17.2452 14.4798 14.2479 14 12 14ZM12 5C10.067 5.00003 8.5 6.56702 8.5 8.5C8.5 10.433 10.067 12 12 12C13.933 12 15.5 10.433 15.5 8.5C15.5 6.56702 13.933 5.00003 12 5Z" fill="#0B8AEB"/></svg>
+        <span class="uuif-scope-label" id="scope-label">All Customers (Global)</span>
+        <svg class="uuif-scope-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="uuif-scope-dropdown" id="scope-dropdown" role="listbox">
+        <div class="uuif-scope-item sel" data-scope="global" role="option">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12.0003 13.25C14.03 13.25 16.6599 13.5403 18.6858 14.5039C19.706 14.9892 20.6252 15.6703 21.2122 16.623C21.8103 17.5939 22.0186 18.7737 21.7346 20.1514L21.6116 20.75H2.38893L2.26588 20.1514C1.9819 18.7738 2.18937 17.5939 2.78737 16.623C3.37434 15.6704 4.29366 14.9892 5.31373 14.5039C7.33971 13.5403 9.97044 13.25 12.0003 13.25ZM12.0003 2.25C14.6235 2.25016 16.7503 4.37675 16.7503 7C16.7503 9.62325 14.6235 11.7498 12.0003 11.75C9.3769 11.75 7.25026 9.62335 7.25026 7C7.25026 4.37665 9.3769 2.25 12.0003 2.25Z" fill="#0B8AEB"/></svg>
+          All Customers (Global)
+        </div>
+        <div class="uuif-scope-item uuif-scope-item-child" data-scope="contoso" role="option">
+          <span class="uuif-scope-status-dot online"></span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12.0003 13.25C14.03 13.25 16.6599 13.5403 18.6858 14.5039C19.706 14.9892 20.6252 15.6703 21.2122 16.623C21.8103 17.5939 22.0186 18.7737 21.7346 20.1514L21.6116 20.75H2.38893L2.26588 20.1514C1.9819 18.7738 2.18937 17.5939 2.78737 16.623C3.37434 15.6704 4.29366 14.9892 5.31373 14.5039C7.33971 13.5403 9.97044 13.25 12.0003 13.25ZM12.0003 2.25C14.6235 2.25016 16.7503 4.37675 16.7503 7C16.7503 9.62325 14.6235 11.7498 12.0003 11.75C9.3769 11.75 7.25026 9.62335 7.25026 7C7.25026 4.37665 9.3769 2.25 12.0003 2.25Z" fill="currentColor"/></svg>
+          Contoso Dental Partners
+        </div>
+        <div class="uuif-scope-item uuif-scope-item-child" data-scope="fabrikam" role="option">
+          <span class="uuif-scope-status-dot online"></span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12.0003 13.25C14.03 13.25 16.6599 13.5403 18.6858 14.5039C19.706 14.9892 20.6252 15.6703 21.2122 16.623C21.8103 17.5939 22.0186 18.7737 21.7346 20.1514L21.6116 20.75H2.38893L2.26588 20.1514C1.9819 18.7738 2.18937 17.5939 2.78737 16.623C3.37434 15.6704 4.29366 14.9892 5.31373 14.5039C7.33971 13.5403 9.97044 13.25 12.0003 13.25ZM12.0003 2.25C14.6235 2.25016 16.7503 4.37675 16.7503 7C16.7503 9.62325 14.6235 11.7498 12.0003 11.75C9.3769 11.75 7.25026 9.62335 7.25026 7C7.25026 4.37665 9.3769 2.25 12.0003 2.25Z" fill="currentColor"/></svg>
+          Fabrikam Logistics
+        </div>
+        <div class="uuif-scope-item uuif-scope-item-child" data-scope="tailspin" role="option">
+          <span class="uuif-scope-status-dot online"></span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12.0003 13.25C14.03 13.25 16.6599 13.5403 18.6858 14.5039C19.706 14.9892 20.6252 15.6703 21.2122 16.623C21.8103 17.5939 22.0186 18.7737 21.7346 20.1514L21.6116 20.75H2.38893L2.26588 20.1514C1.9819 18.7738 2.18937 17.5939 2.78737 16.623C3.37434 15.6704 4.29366 14.9892 5.31373 14.5039C7.33971 13.5403 9.97044 13.25 12.0003 13.25ZM12.0003 2.25C14.6235 2.25016 16.7503 4.37675 16.7503 7C16.7503 9.62325 14.6235 11.7498 12.0003 11.75C9.3769 11.75 7.25026 9.62335 7.25026 7C7.25026 4.37665 9.3769 2.25 12.0003 2.25Z" fill="currentColor"/></svg>
+          Tailspin Credit Union
+        </div>
+        <div class="uuif-scope-item uuif-scope-item-child" data-scope="wingtip" role="option">
+          <span class="uuif-scope-status-dot online"></span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12.0003 13.25C14.03 13.25 16.6599 13.5403 18.6858 14.5039C19.706 14.9892 20.6252 15.6703 21.2122 16.623C21.8103 17.5939 22.0186 18.7737 21.7346 20.1514L21.6116 20.75H2.38893L2.26588 20.1514C1.9819 18.7738 2.18937 17.5939 2.78737 16.623C3.37434 15.6704 4.29366 14.9892 5.31373 14.5039C7.33971 13.5403 9.97044 13.25 12.0003 13.25ZM12.0003 2.25C14.6235 2.25016 16.7503 4.37675 16.7503 7C16.7503 9.62325 14.6235 11.7498 12.0003 11.75C9.3769 11.75 7.25026 9.62335 7.25026 7C7.25026 4.37665 9.3769 2.25 12.0003 2.25Z" fill="currentColor"/></svg>
+          Wingtip Toys Retail
+        </div>
+      </div>
+    </div>
+
+    <div class="uuif-topbar-flex"></div>
+
+    <div class="uuif-topbar-icons">
+      <button class="uuif-top-bar__icon-btn" title="Announcements">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M8.25 14.75H5.73828C5.40992 14.75 5.08742 14.7206 4.77344 14.668L5.85742 16.3653L5.89453 16.4317C5.92856 16.4993 5.95246 16.5716 5.96484 16.6465L6.80469 21.7452C6.86706 21.7443 6.90154 21.747 6.93066 21.7442C7.37716 21.701 7.6739 21.6001 7.86621 21.4219C8.03762 21.2631 8.24999 20.9248 8.25 20.1094C8.25 20.0853 8.25158 20.0612 8.25391 20.0371V19.9444C8.25281 19.8796 8.25 19.7775 8.25 19.6495V14.75ZM22.25 9.44535C22.25 8.14677 21.1336 6.95546 19.7549 6.62601V12.2627C21.1333 11.9333 22.2497 10.7437 22.25 9.44535ZM1.75 9.44535C1.75026 11.594 3.50497 13.25 5.73828 13.25H8.25V5.75004H5.7959C3.52498 5.75004 1.75 7.33104 1.75 9.44535ZM18.2549 4.34574C18.2549 3.78623 18.254 3.41193 18.2324 3.14164C18.2171 2.95014 18.1944 2.87512 18.1895 2.85843C18.1378 2.79027 18.0939 2.76372 18.0078 2.75101C17.9876 2.75572 17.9037 2.77551 17.7148 2.86039C17.4497 2.97959 17.0959 3.17079 16.5742 3.45414C15.6456 3.95851 14.2589 4.52699 12.876 4.96879C11.8112 5.30892 10.6897 5.59115 9.75 5.70023V13.2959C10.6821 13.3957 11.797 13.6531 12.8623 13.9717C14.2442 14.385 15.6375 14.9268 16.5742 15.4356C17.0959 15.7189 17.4497 15.9101 17.7148 16.0293C17.903 16.1139 17.9872 16.1329 18.0078 16.1377C18.0941 16.125 18.1376 16.0989 18.1895 16.0303C18.1949 16.0119 18.2174 15.9363 18.2324 15.7481C18.254 15.4778 18.2549 15.1035 18.2549 14.544V4.34574ZM19.7549 5.09672C21.8439 5.44385 23.75 7.19599 23.75 9.44535C23.7497 11.6944 21.8437 13.4449 19.7549 13.792V14.544C19.7549 15.0771 19.756 15.523 19.7285 15.8672C19.7027 16.1912 19.6445 16.5781 19.418 16.8936C19.1137 17.3173 18.6912 17.5667 18.1738 17.6299C17.7833 17.6776 17.4039 17.5343 17.0996 17.3975C16.7706 17.2496 16.3579 17.0253 15.8584 16.7539C15.0447 16.3119 13.7576 15.8055 12.4326 15.4092C11.4553 15.1169 10.5074 14.9004 9.75 14.8047V19.6495C9.75 19.7606 9.75255 19.839 9.75391 19.919C9.75481 19.9725 9.7536 20.0385 9.75 20.1094L9.73633 20.5C9.67351 21.3812 9.39081 22.0546 8.88574 22.5225C8.32942 23.0379 7.62814 23.1829 7.0752 23.2364C6.92901 23.2505 6.76359 23.25 6.54102 23.25C5.93758 23.2498 5.46079 22.8081 5.36816 22.2471L4.50977 17.042L2.32812 13.6241C1.06917 12.6732 0.25015 11.1903 0.25 9.44535C0.249998 6.35913 2.84772 4.25004 5.7959 4.25004H9C9.80495 4.25004 11.0788 3.96816 12.4189 3.54008C13.7428 3.11719 15.0366 2.58215 15.8584 2.13578C16.3579 1.86446 16.7706 1.64016 17.0996 1.49222C17.3658 1.37257 17.6891 1.24756 18.0273 1.25004L18.1738 1.2598L18.3633 1.29203C18.795 1.38795 19.1517 1.62537 19.418 1.99613C19.6445 2.31166 19.7027 2.69852 19.7285 3.0225C19.756 3.36677 19.7549 3.81265 19.7549 4.34574V5.09672Z" fill="currentColor"/></svg>
+      </button>
+      <button class="uuif-top-bar__icon-btn" title="Feedback">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12.8372 1.75C18.3368 1.75043 22.7502 6.36507 22.7502 12C22.7502 17.6349 18.3368 22.2496 12.8372 22.25C11.5776 22.25 10.3729 22.0065 9.26587 21.5645C9.0731 21.4875 8.95375 21.4403 8.8606 21.418C8.7715 21.3967 8.70639 21.3872 8.62036 21.3838C8.52724 21.3801 8.42489 21.3919 8.24536 21.4111L2.19068 22.0605C2.16545 22.0632 2.1414 22.0647 2.12329 22.0664C2.10358 22.0682 2.09069 22.0701 2.07935 22.0713C1.80499 22.1003 1.53672 21.9758 1.3811 21.748C1.22558 21.52 1.20707 21.2245 1.33423 20.9795C1.35044 20.9483 1.37248 20.9075 1.38892 20.876L3.32251 17.166C3.4742 16.8749 3.57029 16.6947 3.61353 16.5186C3.65361 16.3552 3.66375 16.2291 3.65064 16.0566C3.63668 15.8738 3.55904 15.6416 3.43775 15.2686C3.10397 14.2418 2.92407 13.1422 2.92407 12C2.92407 6.36493 7.33721 1.75013 12.8372 1.75ZM12.8372 3.25C8.21625 3.25013 4.42407 7.14182 4.42407 12C4.42407 12.9842 4.57928 13.9272 4.8645 14.8047C4.95832 15.0932 5.11467 15.5352 5.14575 15.9424L5.15552 16.1807C5.15616 16.4137 5.12977 16.6347 5.07056 16.876C4.97419 17.2685 4.77022 17.6337 4.65259 17.8594L3.31177 20.4307L8.08618 19.9199C8.21809 19.9058 8.44985 19.8757 8.67896 19.8848C8.86786 19.8923 9.03021 19.9162 9.20923 19.959C9.4335 20.0126 9.67033 20.1111 9.82251 20.1719C10.7566 20.5449 11.7726 20.75 12.8372 20.75C17.4579 20.7496 21.2502 16.858 21.2502 12C21.2502 7.14203 17.4579 3.25039 12.8372 3.25ZM12.0002 15.75H7.00025L6.99927 14.25H11.9993L12.0002 15.75ZM13.0002 12.75H6.99927L7.00025 11.25H13.0002V12.75ZM17.0002 9.75H7.00025V8.25H16.9993L17.0002 9.75Z" fill="currentColor"/></svg>
+      </button>
+      <button class="uuif-top-bar__icon-btn" title="Notifications" aria-label="4 notifications">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M20 16.1199L17.9883 13.9825V11.5468C17.9883 9.88985 17.5906 8.44835 16.7953 7.22222C16 5.9961 14.9006 5.20078 13.4971 4.83626V4.09064C13.4971 3.65984 13.3567 3.28704 13.076 2.97222C12.7953 2.65741 12.4366 2.5 12 2.5C11.5634 2.5 11.2047 2.65741 10.924 2.97222C10.6433 3.28704 10.5029 3.65984 10.5029 4.09064V4.83626C9.09941 5.20078 8 5.9961 7.20468 7.22222C6.40935 8.44835 6.0117 9.88985 6.0117 11.5468V13.9825L4 16.1199V17.1637H20V16.1199Z" stroke="currentColor"/><path d="M10.2267 20.2151C10.7112 20.6996 11.3023 20.9419 12 20.9419C12.6589 20.9419 13.2403 20.6996 13.7442 20.2151C14.2481 19.7306 14.5 19.1589 14.5 18.5H9.5C9.5 19.1589 9.74225 19.7306 10.2267 20.2151Z" stroke="currentColor"/></svg>
+        <span class="uuif-topbar-badge">4</span>
+      </button>
+      <button class="uuif-top-bar__icon-btn" title="Support">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M11.9996 1.0332C16.4754 1.03355 20.1381 4.50643 20.4449 8.9043C20.6689 8.8869 20.8992 8.90548 21.1285 8.9668C22.9012 9.44177 23.9541 11.2645 23.4791 13.0371L23.0631 14.5898C22.675 16.0371 21.3885 17.0036 19.9645 17.0508C19.1658 18.8899 17.4794 20.2737 15.3941 20.6133L14.8707 20.6982C14.701 22.135 13.482 23.2499 11.9996 23.25L11.8502 23.2461C10.3702 23.1709 9.1838 21.984 9.10899 20.5039L9.10509 20.3555C9.10516 18.757 10.4011 17.4609 11.9996 17.4609L12.1481 17.4648C13.2765 17.5219 14.233 18.226 14.6578 19.2129L15.1539 19.1328C16.622 18.8935 17.8269 17.9654 18.4674 16.7129C17.7115 16.256 17.3136 15.3413 17.5533 14.4453L18.6354 10.4062C18.7039 10.1507 18.8196 9.91993 18.9684 9.71973V9.50195C18.9684 5.65355 15.8479 2.53356 11.9996 2.5332C8.15116 2.53341 5.03087 5.65345 5.03087 9.50195V9.71973C5.17966 9.9199 5.29434 10.1508 5.3629 10.4062L6.44493 14.4453C6.73559 15.5314 6.09139 16.6482 5.00548 16.9395C3.23316 17.4141 1.41031 16.362 0.935164 14.5898L0.519149 13.0371C0.0442386 11.2647 1.09657 9.44207 2.86876 8.9668C3.09855 8.90526 3.32987 8.88774 3.5543 8.90527C3.86056 4.50682 7.52339 1.0334 11.9996 1.0332ZM11.9996 18.9609C11.2295 18.9609 10.6052 19.5854 10.6051 20.3555C10.6051 21.1256 11.2295 21.75 11.9996 21.75C12.7696 21.7499 13.3941 21.1255 13.3941 20.3555C13.3941 19.5855 12.7696 18.9611 11.9996 18.9609Z" fill="currentColor"/></svg>
+      </button>
+      <button class="uuif-top-bar__icon-btn" title="Help">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10.5" stroke="currentColor" stroke-width="1.4"/><path d="M9.5 9.5C9.5 8.11929 10.6193 7 12 7C13.3807 7 14.5 8.11929 14.5 9.5C14.5 10.6809 13.7014 11.6733 12.6131 11.9419C12.2512 12.0313 12 12.3576 12 12.7297V14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="12" cy="17" r="0.75" fill="currentColor"/></svg>
+      </button>
+      <div class="uuif-topbar-divider"></div>
+      <div class="uuif-avatar-wrap">
+        <button class="uuif-avatar" id="avatar-btn" title="Demo Engineer" aria-label="Account menu">DE</button>
+        <div class="uuif-drop-menu" id="avatar-menu">
+          <div class="uuif-drop-menu-head">
+            <strong>Demo Engineer</strong>
+            <span>engineer@sonicwall.com</span>
+          </div>
+          <button class="uuif-drop-menu-item">Profile Settings</button>
+          <button class="uuif-drop-menu-item">Partner: Northwind Security Group</button>
+          <button class="uuif-drop-menu-item">Sign Out</button>
+        </div>
+      </div>
+    </div>
+
+  </header><!-- /topbar -->
+
+  <!-- PAGE SECTIONS -->
+  <main class="uuif-page-content" id="page-content">
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE: overview
+     ═══════════════════════════════════════════════════════════ -->
+<section data-page="overview">
+  <div class="pg-head">
+    <div style="display:flex; justify-content:space-between; align-items:baseline;">
+      <div>
+        <h1>MSS Dashboard</h1>
+        <p>Welcome back, Northwind Security Group · Partner view</p>
+      </div>
+      <div style="font: 600 13px var(--uuif-font-family); color: var(--uuif-text-secondary);">Last 30 days</div>
+    </div>
+  </div>
+
+  <!-- Account Metrics -->
+  <div class="acct-metrics">
+    <div class="acct-metric">
+      <div class="acct-metric-label">Services</div>
+      <div class="acct-metric-value num">4</div>
+    </div>
+    <div class="acct-metric">
+      <div class="acct-metric-label">Customers</div>
+      <div class="acct-metric-value num">4</div>
+    </div>
+    <div class="acct-metric">
+      <div class="acct-metric-label">Open MSS Cases</div>
+      <div class="acct-metric-value num">4</div>
+    </div>
+    <div class="acct-metric">
+      <div class="acct-metric-label">Support Cases Awaiting Reply</div>
+      <div class="acct-metric-value num">1</div>
+    </div>
+    <div class="acct-metric">
+      <div class="acct-metric-label">SOC Alerts Awaiting Reply</div>
+      <div class="acct-metric-value num">1</div>
+    </div>
+    <div class="acct-metric">
+      <div class="acct-metric-label">SOC Alerts (30d)</div>
+      <div class="acct-metric-value num">12</div>
+    </div>
+    <div class="acct-metric">
+      <div class="acct-metric-label">Detections Screened</div>
+      <div class="acct-metric-value num">48,213</div>
+    </div>
+    <div class="acct-metric">
+      <div class="acct-metric-label">Avg Time to Notify (Critical)</div>
+      <div class="acct-metric-value num">18<span style="font-size:14px;font-weight:400">m</span></div>
+    </div>
+  </div>
+
+  <!-- Attention banner -->
+  <div class="uuif-banner uuif-banner--warning">
+    <div class="uuif-banner-icon">!</div>
+    <div>
+      <div class="uuif-banner-title">1 Item Needs Attention</div>
+      <div class="uuif-banner-text">Capture Client — Contoso Dental Partners has 1 endpoint requiring review. <a href="#capture-client" style="color:var(--uuif-brand-orange);text-decoration:underline">View details →</a></div>
+    </div>
+  </div>
+
+  <div class="pg-2col">
+    <!-- Services panel -->
+    <div class="uuif-card mb-5">
+      <div class="uuif-card-hd">
+        <div class="uuif-card-title">Managed Services</div>
+        <div class="uuif-card-hd-actions"><a href="#coverage" class="uuif-btn uuif-btn--sm">Coverage report</a></div>
+      </div>
+      <div class="uuif-card-bd--flush">
+        <a class="svc-row" href="#fw-list">
+          <div class="svc-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M10.3662 5.9248C9.63588 6.89856 8.47473 9.47839 9.67185 12.0068C11.1685 15.1675 14.221 19.72 7.69724 22.999C8.25147 20.912 8.51029 19.6178 6.43943 17.2881C6.05076 16.791 5.99021 16.8496 5.86521 16.9629C5.58716 16.3661 5.40885 15.7433 5.32224 15.1084C4.62752 12.0344 6.7465 8.17775 10.3662 5.9248ZM3.07224 2C4.95467 3.38438 6.21639 5.41962 6.92576 7.5625C5.92104 8.72537 5.15828 10.0442 4.71091 11.4209C4.07623 15.7493 5.13279 17.7354C3.83107 19.3482 4.19724 21.876C4.24412 22.2061C-2.57163 18.0882 0.342993 13.5758 2.56541 10.1357C3.18064 9.16992C4.92729 6.34602 3.07224 2ZM15.5 21.6895H11.9345C13.0548 20.314 13.6006 17.5479H15.5V21.6895ZM21.7129 20.6895C21.7129 21.2416 21.2649 21.6892 20.7129 21.6895H16.5351V17.5479H21.7129V20.6895ZM18.3281 5.13574C20.7752 5.20328 23.7832 5.56445C16.6924 6.44019 14.1338 8.43848C11.6332 10.3919 16.459 13.4062C11.3951 12.6032 10.3222 9.78223C9.12114 6.62416 13.773 5.01024 18.3281 5.13574Z" fill="var(--uuif-icon-primary)"/></svg></div>
+          <div class="svc-info">
+            <div class="svc-name">MPSS — Managed Perimeter Security</div>
+            <div class="svc-meta">SonicWall Next-Generation Firewalls</div>
+          </div>
+          <div><div class="svc-big">5</div><div class="svc-ok">All healthy</div></div>
+        </a>
+        <a class="svc-row" href="#cloud-avanan">
+          <div class="svc-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M0.985987 13.9316C3.91963 11.0074 13.6121 11.5244 16.4997 12.1182C12.9806 12.6704 6.49964 13.6928 4.99966 16.8428C3.64762 19.6824 5.94446 22.5485 7.31021 23.668C0.98562 21.1778 -1.58221 17.1614 0.985987 13.9316ZM9.49966 2.66797C11.0092 2.66804 12.377 3.34679 13.3708 4.44531C14.0044 4.06506 15.4997 3.84961C17.9847 3.84976 19.9997 8.86914C19.9958 9.02246C22.2632 9.36954 24.0006 13.6934C21.8844 18.418H5.72524C5.74203 17.4837 5.99966 17.1367C8.02593 14.409 21.4997 12.1182C15.0041 10.2995 5.41476 10.0568 1.23013 12.2363C1.66624 10.8899 3.99966 9.29395V8.80371C3.99975 5.41515 6.46232 2.66819 9.49966 2.66797Z" fill="var(--uuif-icon-primary)"/></svg></div>
+          <div class="svc-info">
+            <div class="svc-name">Avanan — Cloud Email Security</div>
+            <div class="svc-meta">Microsoft 365 &amp; Google Workspace protection</div>
+          </div>
+          <div><div class="svc-big">3</div><div class="svc-ok">All healthy</div></div>
+        </a>
+        <a class="svc-row" href="#capture-client">
+          <div class="svc-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M21.5 11.8281C21.5 14.5058 20.2318 17.0252 18.082 18.6191L12.1719 22.999C10.0114 21.2879 6.26588 17.669 9.44336 15.1475C12.1074 13.0974 17.5329 11.7577 21.5 11.0059V11.8281ZM21.5 9.74121C19.9996 9.60355 18.3281 9.47395 16.7764 9.4082C9.72146 9.13166 2.77789 10.066 2.86035 14.2715C2.62398 13.4883 2.5 12.6658 2.5 11.8281V2L8.03711 2.61523C10.671 2.9081 15.9629 2.61523L21.5 2V9.74121Z" fill="var(--uuif-icon-primary)"/></svg></div>
+          <div class="svc-info">
+            <div class="svc-name">Capture Client — Endpoint Security</div>
+            <div class="svc-meta">Managed endpoint detection &amp; response</div>
+          </div>
+          <div><div class="svc-big">190</div><div class="svc-attn">1 needs attention</div></div>
+        </a>
+        <a class="svc-row" href="#network-mdr">
+          <div class="svc-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M21.2051 12.9235C22.1964 12.9236 23.0215 14.7399V19.4294C23.0215 20.4207 22.1768 21.2467 21.2051 21.2467H16.5146C15.5234 21.2465 14.6982 19.4294V14.7399C14.6983 13.7487 15.5431 12.9238 16.5146 12.9235H21.2051Z" fill="var(--uuif-icon-primary)"/><path d="M3.375 2.24967C3.6513 1.94123 4.43359 2.19107C4.49219 3.24967C3.23647 4.65152 2.5 8.29849C2.50001 10.1921 3.23651 11.9454 4.49219 13.3473C4.74212 14.1305 4.43359 14.4069C4.12508 14.6832 3.65136 14.6568C3.375 14.3483C1.89653 12.6977 1 8.29849C1.00018 6.00165 1.89656 3.90017 3.375 2.24967Z" fill="var(--uuif-icon-primary)"/><path d="M19.4141 2.19107C19.7225 1.91494 20.4727 2.24967C21.951 3.90015 22.8477 8.29849C21.3477 8.29849C21.3475 6.40504 20.6112 4.65152 19.3555 3.24967C19.1057 2.46731 19.4141 2.19107Z" fill="var(--uuif-icon-primary)"/></svg></div>
+          <div class="svc-info">
+            <div class="svc-name">MDR Network — Network Detection</div>
+            <div class="svc-meta">Network sensors and traffic analysis</div>
+          </div>
+          <div><div class="svc-big">3</div><div class="svc-ok">All healthy</div></div>
+        </a>
+      </div>
+    </div><!-- /services -->
+
+    <!-- Aside: Customers -->
+    <div>
+      <div class="uuif-card mb-5">
+        <div class="uuif-card-hd"><div class="uuif-card-title">Customers</div></div>
+        <div class="uuif-card-bd--flush">
+          <a class="acct-row" href="#overview" data-scope-link="contoso">
+            <span class="k"><span class="sta-dot online" style="margin-right:6px"></span>Contoso Dental Partners</span>
+            <span class="uuif-chip">4 services</span>
+          </a>
+          <a class="acct-row" href="#overview" data-scope-link="fabrikam">
+            <span class="k"><span class="sta-dot online" style="margin-right:6px"></span>Fabrikam Logistics</span>
+            <span class="uuif-chip">3 services</span>
+          </a>
+          <a class="acct-row" href="#overview" data-scope-link="tailspin">
+            <span class="k"><span class="sta-dot online" style="margin-right:6px"></span>Tailspin Credit Union</span>
+            <span class="uuif-chip">3 services</span>
+          </a>
+          <a class="acct-row" href="#overview" data-scope-link="wingtip">
+            <span class="k"><span class="sta-dot online" style="margin-right:6px"></span>Wingtip Toys Retail</span>
+            <span class="uuif-chip">2 services</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Open Tickets card -->
+  <div class="uuif-card">
+    <div class="uuif-card-hd">
+      <div class="uuif-card-title">Open Tickets <span class="uuif-chip" style="margin-left:6px">4</span></div>
+      <div class="uuif-card-hd-actions"><a href="#tickets" class="uuif-btn uuif-btn--sm">View all</a></div>
+    </div>
+    <div class="uuif-card-bd--flush">
+      <div class="uuif-table-scroll">
+        <table class="uuif-table">
+          <thead><tr>
+            <th>Ticket #</th><th>Customer</th><th>Service</th><th>Summary</th><th>Status</th><th>Age</th>
+          </tr></thead>
+          <tbody>
+            <tr class="clickable attn-crit" onclick="navigate('ticket-700101')">
+              <td class="tt-name">#700101</td>
+              <td>Contoso Dental Partners</td>
+              <td><span class="uuif-chip">MPSS</span></td>
+              <td>Emergency FW rule change required</td>
+              <td><span class="uuif-chip uuif-chip--error">Waiting on You · Overdue</span></td>
+              <td class="num">3d</td>
+            </tr>
+            <tr class="clickable attn-info" onclick="navigate('ticket-700102')">
+              <td class="tt-name">#700102</td>
+              <td>Fabrikam Logistics</td>
+              <td><span class="uuif-chip">Avanan</span></td>
+              <td>Phishing campaign targeting HR</td>
+              <td><span class="uuif-chip">With MSS</span></td>
+              <td class="num">1d</td>
+            </tr>
+            <tr class="clickable" onclick="navigate('tickets')">
+              <td class="tt-name">#700103</td>
+              <td>Tailspin Credit Union</td>
+              <td><span class="uuif-chip">MPSS</span></td>
+              <td>Monthly maintenance window request</td>
+              <td><span class="uuif-chip">With MSS</span></td>
+              <td class="num">6h</td>
+            </tr>
+            <tr class="clickable" onclick="navigate('tickets')">
+              <td class="tt-name">#700104</td>
+              <td>Wingtip Toys Retail</td>
+              <td><span class="uuif-chip">MPSS</span></td>
+              <td>FW firmware upgrade — scheduled</td>
+              <td><span class="uuif-chip uuif-chip--success">Scheduled</span></td>
+              <td class="num">2h</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</section><!-- /overview -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE: coverage
+     ═══════════════════════════════════════════════════════════ -->
+<section data-page="coverage" hidden>
+
+  <div class="pg-head">
+    <h1>Service Coverage</h1>
+    <p>Partner-wide service enrollment and coverage status</p>
+  </div>
+
+  <!-- Ring cards -->
+  <div class="ring-grid">
+
+    <!-- MPSS 75% -->
+    <div class="ring-card">
+      <div class="ring-cat">MPSS Firewalls</div>
+      <div class="ring-wrap">
+        <svg width="110" height="110" viewBox="0 0 110 110">
+          <circle cx="55" cy="55" r="44" fill="none" stroke="#d2dff2" stroke-width="10"/>
+          <circle cx="55" cy="55" r="44" fill="none" stroke="#5b74a7" stroke-width="10"
+            stroke-dasharray="276.46" stroke-dashoffset="69.1"
+            stroke-linecap="round" transform="rotate(-90 55 55)"/>
+        </svg>
+        <div class="ring-center"><span class="ring-pct">75%</span><span class="ring-of">3 of 4</span></div>
+      </div>
+      <div class="ring-card-sub">3 customers enrolled<br>1 customer eligible</div>
+      <div class="ring-chips">
+        <span class="uuif-chip uuif-chip--success">Contoso</span>
+        <span class="uuif-chip uuif-chip--success">Fabrikam</span>
+        <span class="uuif-chip uuif-chip--success">Wingtip</span>
+        <span class="uuif-chip">Tailspin</span>
+      </div>
+    </div>
+
+    <!-- Avanan 75% -->
+    <div class="ring-card">
+      <div class="ring-cat">Avanan Cloud Email</div>
+      <div class="ring-wrap">
+        <svg width="110" height="110" viewBox="0 0 110 110">
+          <circle cx="55" cy="55" r="44" fill="none" stroke="#d2dff2" stroke-width="10"/>
+          <circle cx="55" cy="55" r="44" fill="none" stroke="#5b74a7" stroke-width="10"
+            stroke-dasharray="276.46" stroke-dashoffset="69.1"
+            stroke-linecap="round" transform="rotate(-90 55 55)"/>
+        </svg>
+        <div class="ring-center"><span class="ring-pct">75%</span><span class="ring-of">3 of 4</span></div>
+      </div>
+      <div class="ring-card-sub">3 customers enrolled<br>1 customer eligible</div>
+      <div class="ring-chips">
+        <span class="uuif-chip uuif-chip--success">Contoso</span>
+        <span class="uuif-chip uuif-chip--success">Fabrikam</span>
+        <span class="uuif-chip uuif-chip--success">Tailspin</span>
+        <span class="uuif-chip">Wingtip</span>
+      </div>
+    </div>
+
+    <!-- Network 75% -->
+    <div class="ring-card">
+      <div class="ring-cat">MDR Network</div>
+      <div class="ring-wrap">
+        <svg width="110" height="110" viewBox="0 0 110 110">
+          <circle cx="55" cy="55" r="44" fill="none" stroke="#d2dff2" stroke-width="10"/>
+          <circle cx="55" cy="55" r="44" fill="none" stroke="#5b74a7" stroke-width="10"
+            stroke-dasharray="276.46" stroke-dashoffset="69.1"
+            stroke-linecap="round" transform="rotate(-90 55 55)"/>
+        </svg>
+        <div class="ring-center"><span class="ring-pct">75%</span><span class="ring-of">3 of 4</span></div>
+      </div>
+      <div class="ring-card-sub">3 customers enrolled<br>1 customer eligible</div>
+      <div class="ring-chips">
+        <span class="uuif-chip uuif-chip--success">Contoso</span>
+        <span class="uuif-chip uuif-chip--success">Tailspin</span>
+        <span class="uuif-chip uuif-chip--success">Wingtip</span>
+        <span class="uuif-chip">Fabrikam</span>
+      </div>
+    </div>
+
+    <!-- Identity 0% upsell -->
+    <div class="ring-card ring-card--upsell">
+      <div class="ring-cat">Identity Security</div>
+      <div class="ring-wrap">
+        <svg width="110" height="110" viewBox="0 0 110 110">
+          <circle cx="55" cy="55" r="44" fill="none" stroke="#d2dff2" stroke-width="10"/>
+        </svg>
+        <div class="ring-center"><span class="ring-pct" style="font-size:13px;color:var(--uuif-text-tertiary)">Not<br>enrolled</span></div>
+      </div>
+      <div class="ring-card-sub" style="color:var(--uuif-text-tertiary)">0 of 4 customers</div>
+      <div class="ring-chips"><span class="uuif-chip uuif-chip--selected">Upsell opportunity</span></div>
+    </div>
+
+    <!-- Vulnerability 0% upsell -->
+    <div class="ring-card ring-card--upsell">
+      <div class="ring-cat">Vulnerability Mgmt.</div>
+      <div class="ring-wrap">
+        <svg width="110" height="110" viewBox="0 0 110 110">
+          <circle cx="55" cy="55" r="44" fill="none" stroke="#d2dff2" stroke-width="10"/>
+        </svg>
+        <div class="ring-center"><span class="ring-pct" style="font-size:13px;color:var(--uuif-text-tertiary)">Not<br>enrolled</span></div>
+      </div>
+      <div class="ring-card-sub" style="color:var(--uuif-text-tertiary)">0 of 4 customers</div>
+      <div class="ring-chips"><span class="uuif-chip uuif-chip--selected">Upsell opportunity</span></div>
+    </div>
+
+  </div><!-- /ring-grid -->
+
+  <!-- Coverage matrix table -->
+  <div class="uuif-card">
+    <div class="uuif-card-hd"><div class="uuif-card-title">Coverage Detail by Customer</div></div>
+    <div class="uuif-card-bd--flush">
+      <div class="uuif-table-scroll">
+        <table class="uuif-table">
+          <thead><tr>
+            <th>Customer</th>
+            <th>MPSS Firewalls</th>
+            <th>Avanan Cloud</th>
+            <th>Capture Client</th>
+            <th>MDR Network</th>
+            <th>Identity</th>
+            <th>Vulnerability</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td class="tt-name">Contoso Dental Partners</td>
+              <td><span class="uuif-chip uuif-chip--success">✓ 2 units</span></td>
+              <td><span class="uuif-chip uuif-chip--success">✓ M365</span></td>
+              <td><span class="uuif-chip uuif-chip--success">✓ 75 ep</span></td>
+              <td><span class="uuif-chip uuif-chip--success">✓ 1 dev</span></td>
+              <td><span class="uuif-chip">—</span></td>
+              <td><span class="uuif-chip">—</span></td>
+            </tr>
+            <tr>
+              <td class="tt-name">Fabrikam Logistics</td>
+              <td><span class="uuif-chip uuif-chip--success">✓ 1 unit</span></td>
+              <td><span class="uuif-chip uuif-chip--success">✓ M365</span></td>
+              <td><span class="uuif-chip uuif-chip--success">✓ 60 ep</span></td>
+              <td><span class="uuif-chip">—</span></td>
+              <td><span class="uuif-chip">—</span></td>
+              <td><span class="uuif-chip">—</span></td>
+            </tr>
+            <tr>
+              <td class="tt-name">Tailspin Credit Union</td>
+              <td><span class="uuif-chip">—</span></td>
+              <td><span class="uuif-chip uuif-chip--success">✓ M365</span></td>
+              <td><span class="uuif-chip uuif-chip--success">✓ 30 ep</span></td>
+              <td><span class="uuif-chip uuif-chip--success">✓ 1 dev</span></td>
+              <td><span class="uuif-chip">—</span></td>
+              <td><span class="uuif-chip">—</span></td>
+            </tr>
+            <tr>
+              <td class="tt-name">Wingtip Toys Retail</td>
+              <td><span class="uuif-chip uuif-chip--success">✓ 1 unit</span></td>
+              <td><span class="uuif-chip">—</span></td>
+              <td><span class="uuif-chip uuif-chip--success">✓ 25 ep</span></td>
+              <td><span class="uuif-chip uuif-chip--success">✓ 1 dev</span></td>
+              <td><span class="uuif-chip">—</span></td>
+              <td><span class="uuif-chip">—</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="uuif-card-ft">
+      <a href="#contacts" class="uuif-btn uuif-btn--sm">Contact customers about upsell →</a>
+    </div>
+  </div>
+
+</section><!-- /coverage -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE: alerts
+     ═══════════════════════════════════════════════════════════ -->
+<section data-page="alerts" hidden>
+  <div class="pg-head">
+    <h1>SOC Alerts</h1>
+    <p>Security events escalated by the SOC · Last 30 days</p>
+  </div>
+
+  <div class="uuif-count-grid mb-5">
+    <div class="uuif-count uuif-count--error"><div class="uuif-count-head"><span class="uuif-count-label">Critical</span></div><div class="uuif-count-value num">2</div></div>
+    <div class="uuif-count uuif-count--warn"><div class="uuif-count-head"><span class="uuif-count-label">Major</span></div><div class="uuif-count-value num">4</div></div>
+    <div class="uuif-count"><div class="uuif-count-head"><span class="uuif-count-label">Minor</span></div><div class="uuif-count-value num">6</div><div class="uuif-count-sub" style="color:var(--uuif-status-minor)">Minor severity</div></div>
+    <div class="uuif-count uuif-count--ok"><div class="uuif-count-head"><span class="uuif-count-label">Resolved</span></div><div class="uuif-count-value num">10</div></div>
+  </div>
+
+  <div class="filter-bar">
+    <span class="filter-label">Filter by severity:</span>
+    <button class="uuif-btn uuif-btn--sm fpill is-on" onclick="toggleFilter(this)">All</button>
+    <button class="uuif-btn uuif-btn--sm fpill" onclick="toggleFilter(this)">Critical</button>
+    <button class="uuif-btn uuif-btn--sm fpill" onclick="toggleFilter(this)">Major</button>
+    <button class="uuif-btn uuif-btn--sm fpill" onclick="toggleFilter(this)">Minor</button>
+    <span class="filter-push"></span>
+    <input class="uuif-input" type="text" placeholder="Search alerts…" style="width:200px">
+  </div>
+
+  <div class="uuif-card">
+    <div class="uuif-card-bd--flush">
+      <div class="uuif-table-scroll">
+        <table class="uuif-table">
+          <thead><tr><th>Date/Time</th><th>Sev.</th><th>Customer</th><th>Type</th><th>Summary</th><th>Status</th><th>Ticket</th></tr></thead>
+          <tbody>
+            <tr class="attn-crit"><td class="num small muted nowrap">Sep 07 14:23</td><td><span class="sev-cell"><span class="uuif-sev uuif-sev--critical"></span><span class="sev-critical">Critical</span></span></td><td>Contoso Dental</td><td>Lateral Movement</td><td>Suspicious SMB traversal from workstation 192.168.1.45</td><td><span class="uuif-chip">Open</span></td><td><a href="#ticket-700101" class="tt-name" onclick="navigate('ticket-700101');return false">#700101</a></td></tr>
+            <tr class="attn-crit"><td class="num small muted nowrap">Sep 05 09:11</td><td><span class="sev-cell"><span class="uuif-sev uuif-sev--critical"></span><span class="sev-critical">Critical</span></span></td><td>Fabrikam Logistics</td><td>Phishing Campaign</td><td>Spear-phishing targeting finance team — 14 delivery attempts blocked</td><td><span class="uuif-chip">Open</span></td><td><a href="#ticket-700102" class="tt-name" onclick="navigate('ticket-700102');return false">#700102</a></td></tr>
+            <tr class="attn-warn"><td class="num small muted nowrap">Sep 06 22:48</td><td><span class="sev-cell"><span class="uuif-sev uuif-sev--major"></span><span class="sev-major">Major</span></span></td><td>Wingtip Toys</td><td>Anomalous Outbound</td><td>High volume DNS queries to newly registered domain</td><td><span class="uuif-chip uuif-chip--success">Resolved</span></td><td class="muted">—</td></tr>
+            <tr class="attn-warn"><td class="num small muted nowrap">Sep 04 16:02</td><td><span class="sev-cell"><span class="uuif-sev uuif-sev--major"></span><span class="sev-major">Major</span></span></td><td>Tailspin Credit</td><td>Brute Force</td><td>SSH brute force from external IP 185.220.x.x blocked at perimeter</td><td><span class="uuif-chip uuif-chip--success">Resolved</span></td><td class="muted">—</td></tr>
+            <tr class="attn-warn"><td class="num small muted nowrap">Sep 03 11:30</td><td><span class="sev-cell"><span class="uuif-sev uuif-sev--major"></span><span class="sev-major">Major</span></span></td><td>Contoso Dental</td><td>Policy Violation</td><td>Tor exit node traffic detected — automatic block applied</td><td><span class="uuif-chip uuif-chip--success">Resolved</span></td><td class="muted">—</td></tr>
+            <tr class="attn-warn"><td class="num small muted nowrap">Sep 01 08:15</td><td><span class="sev-cell"><span class="uuif-sev uuif-sev--major"></span><span class="sev-major">Major</span></span></td><td>Fabrikam Logistics</td><td>Data Exfil Risk</td><td>Large HTTPS transfer to unknown cloud storage provider</td><td><span class="uuif-chip uuif-chip--success">Resolved</span></td><td class="muted">—</td></tr>
+            <tr><td class="num small muted nowrap">Aug 31 19:44</td><td><span class="sev-cell"><span class="uuif-sev uuif-sev--minor"></span><span class="sev-minor">Minor</span></span></td><td>Wingtip Toys</td><td>Scan Activity</td><td>Port scan from 10.0.2.x (internal) — possible misconfiguration</td><td><span class="uuif-chip uuif-chip--success">Resolved</span></td><td class="muted">—</td></tr>
+            <tr><td class="num small muted nowrap">Aug 30 14:02</td><td><span class="sev-cell"><span class="uuif-sev uuif-sev--minor"></span><span class="sev-minor">Minor</span></span></td><td>Tailspin Credit</td><td>Failed Auth</td><td>Repeated failed MFA attempts — 7 consecutive failures locked account</td><td><span class="uuif-chip uuif-chip--success">Resolved</span></td><td class="muted">—</td></tr>
+            <tr><td class="num small muted nowrap">Aug 28 10:55</td><td><span class="sev-cell"><span class="uuif-sev uuif-sev--minor"></span><span class="sev-minor">Minor</span></span></td><td>Contoso Dental</td><td>Malware Blocked</td><td>Trojan downloader detected and quarantined on workstation DC-WKS-12</td><td><span class="uuif-chip uuif-chip--success">Resolved</span></td><td class="muted">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="uuif-pagination"><span class="muted small">Showing 9 of 12 alerts</span><div class="flex-row"><button class="uuif-btn uuif-btn--sm" disabled>← Prev</button><button class="uuif-btn uuif-btn--sm">Next →</button></div></div>
+  </div>
+
+</section><!-- /alerts -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE: tickets
+     ═══════════════════════════════════════════════════════════ -->
+<section data-page="tickets" hidden>
+  <div class="pg-head">
+    <h1>MSS Tickets</h1>
+    <p>Support and service cases managed by the SonicWall MSS team</p>
+  </div>
+
+  <div class="filter-bar">
+    <span class="filter-label">Status:</span>
+    <button class="uuif-btn uuif-btn--sm fpill is-on" onclick="toggleFilter(this)">All Open</button>
+    <button class="uuif-btn uuif-btn--sm fpill" onclick="toggleFilter(this)">Waiting on You</button>
+    <button class="uuif-btn uuif-btn--sm fpill" onclick="toggleFilter(this)">With MSS</button>
+    <button class="uuif-btn uuif-btn--sm fpill" onclick="toggleFilter(this)">Scheduled</button>
+    <span class="filter-push"></span>
+    <a href="#tickets" class="uuif-btn uuif-btn--sm uuif-btn--primary">+ New Ticket</a>
+  </div>
+
+  <div class="uuif-card">
+    <div class="uuif-card-bd--flush">
+      <div class="uuif-table-scroll">
+        <table class="uuif-table">
+          <thead><tr><th>Ticket #</th><th>Customer</th><th>Service</th><th>Summary</th><th>Priority</th><th>Status</th><th>Last Updated</th></tr></thead>
+          <tbody>
+            <tr class="clickable attn-crit" onclick="navigate('ticket-700101')">
+              <td class="tt-name">#700101</td>
+              <td>Contoso Dental Partners</td>
+              <td><span class="uuif-chip">MPSS</span></td>
+              <td>Emergency FW rule change required — lateral movement response</td>
+              <td><span class="uuif-chip uuif-chip--error">High</span></td>
+              <td><span class="uuif-chip uuif-chip--error">Waiting on You · Overdue</span></td>
+              <td class="num small muted nowrap">3 days ago</td>
+            </tr>
+            <tr class="clickable attn-info" onclick="navigate('ticket-700102')">
+              <td class="tt-name">#700102</td>
+              <td>Fabrikam Logistics</td>
+              <td><span class="uuif-chip">Avanan</span></td>
+              <td>Phishing campaign targeting finance — policy review requested</td>
+              <td><span class="uuif-chip uuif-chip--warning">Medium</span></td>
+              <td><span class="uuif-chip">With MSS</span></td>
+              <td class="num small muted nowrap">1 day ago</td>
+            </tr>
+            <tr class="clickable" onclick="navigate('tickets')">
+              <td class="tt-name">#700103</td>
+              <td>Tailspin Credit Union</td>
+              <td><span class="uuif-chip">MPSS</span></td>
+              <td>Monthly maintenance window request — FW rule audit</td>
+              <td><span class="uuif-chip">Low</span></td>
+              <td><span class="uuif-chip">With MSS</span></td>
+              <td class="num small muted nowrap">6 hours ago</td>
+            </tr>
+            <tr class="clickable" onclick="navigate('tickets')">
+              <td class="tt-name">#700104</td>
+              <td>Wingtip Toys Retail</td>
+              <td><span class="uuif-chip">MPSS</span></td>
+              <td>Firmware upgrade — TZ270 to 7.1.3 scheduled maintenance</td>
+              <td><span class="uuif-chip">Low</span></td>
+              <td><span class="uuif-chip uuif-chip--success">Scheduled</span></td>
+              <td class="num small muted nowrap">2 hours ago</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section><!-- /tickets -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE: ticket-700101
+     ═══════════════════════════════════════════════════════════ -->
+<section data-page="ticket-700101" hidden>
+
+  <div class="back-row mb-5">
+    <button class="uuif-btn uuif-btn--sm" onclick="navigate('tickets')">← Back to Tickets</button>
+    <h1>Ticket #700101</h1>
+    <span class="uuif-chip uuif-chip--error" style="margin-left:auto">Waiting on You · Overdue</span>
+  </div>
+
+  <div class="uuif-banner uuif-banner--error mb-5">
+    <div class="uuif-banner-icon">✕</div>
+    <div>
+      <div class="uuif-banner-title">Action Required — Overdue Response</div>
+      <div class="uuif-banner-text">This ticket has been waiting on your response for 3 days. MSS cannot proceed with the emergency firewall rule change without your authorization. Please review and respond.</div>
+    </div>
+  </div>
+
+  <div class="pg-2col mb-5">
+    <div class="dev-meta-grid">
+      <div class="dev-meta-item"><div class="dev-meta-label">Customer</div><div class="dev-meta-val">Contoso Dental Partners</div></div>
+      <div class="dev-meta-item"><div class="dev-meta-label">Service</div><div class="dev-meta-val">MPSS — Firewalls</div></div>
+      <div class="dev-meta-item"><div class="dev-meta-label">Priority</div><div class="dev-meta-val" style="color:var(--uuif-brand-red)">High</div></div>
+      <div class="dev-meta-item"><div class="dev-meta-label">Status</div><div class="dev-meta-val" style="color:var(--uuif-brand-red)">Waiting on You</div></div>
+      <div class="dev-meta-item"><div class="dev-meta-label">Opened</div><div class="dev-meta-val">Sep 04, 2024</div></div>
+      <div class="dev-meta-item"><div class="dev-meta-label">Last Updated</div><div class="dev-meta-val">Sep 07, 2024</div></div>
+      <div class="dev-meta-item"><div class="dev-meta-label">MSS Analyst</div><div class="dev-meta-val">J. Williams (SOC L2)</div></div>
+      <div class="dev-meta-item"><div class="dev-meta-label">Related Alert</div><div class="dev-meta-val">ALT-2024-0891 (Critical)</div></div>
+    </div>
+  </div>
+
+  <div class="uuif-card">
+    <div class="uuif-card-hd"><div class="uuif-card-title">Ticket Thread</div></div>
+    <div class="uuif-card-bd">
+
+      <div class="tnote tnote--mss">
+        <div class="tnote-meta"><strong>J. Williams — SonicWall MSS SOC</strong> &nbsp;·&nbsp; Sep 04, 2024 at 10:42 AM</div>
+        <div class="tnote-text">We have detected lateral movement activity originating from workstation at 192.168.1.45 in your Contoso network. The traffic pattern indicates an active intrusion — SMB traversal consistent with credential harvesting tools.
+
+We have placed a temporary block on the affected workstation's outbound access. However, to fully remediate we need your authorization to:
+
+1. Isolate VLAN segment 192.168.1.0/24 from production
+2. Deploy emergency ACL blocking lateral movement to file servers
+3. Enable deep packet inspection on the affected segment
+
+Please confirm authorization ASAP — every hour increases risk of data exfiltration.</div>
+      </div>
+
+      <div class="tnote tnote--mss">
+        <div class="tnote-meta"><strong>J. Williams — SonicWall MSS SOC</strong> &nbsp;·&nbsp; Sep 05, 2024 at 09:15 AM</div>
+        <div class="tnote-text">Following up on this ticket — we still require authorization to proceed with the emergency rule changes. We have seen additional scanning activity from the same host overnight. Ticket is now overdue. Please respond or call our SOC hotline: 1-888-MSS-HELP.</div>
+      </div>
+
+      <div class="treply">
+        <div class="treply-label">Your Reply</div>
+        <textarea class="uuif-input w-full" rows="4" placeholder="Type your response here…"></textarea>
+        <div class="treply-actions">
+          <button class="uuif-btn">Save Draft</button>
+          <button class="uuif-btn uuif-btn--primary">Send Reply</button>
+          <button class="uuif-btn uuif-btn--primary" style="background:var(--uuif-brand-green);border-color:transparent">Authorize Changes</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section><!-- /ticket-700101 -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE: ticket-700102
+     ═══════════════════════════════════════════════════════════ -->
+<section data-page="ticket-700102" hidden>
+
+  <div class="back-row mb-5">
+    <button class="uuif-btn uuif-btn--sm" onclick="navigate('tickets')">← Back to Tickets</button>
+    <h1>Ticket #700102</h1>
+    <span class="uuif-chip" style="margin-left:auto">With MSS</span>
+  </div>
+
+  <div class="pg-2col mb-5">
+    <div class="dev-meta-grid">
+      <div class="dev-meta-item"><div class="dev-meta-label">Customer</div><div class="dev-meta-val">Fabrikam Logistics</div></div>
+      <div class="dev-meta-item"><div class="dev-meta-label">Service</div><div class="dev-meta-val">Avanan Cloud Email</div></div>
+      <div class="dev-meta-item"><div class="dev-meta-label">Priority</div><div class="dev-meta-val" style="color:var(--uuif-status-major)">Medium</div></div>
+      <div class="dev-meta-item"><div class="dev-meta-label">Status</div><div class="dev-meta-val">With MSS</div></div>
+      <div class="dev-meta-item"><div class="dev-meta-label">Opened</div><div class="dev-meta-val">Sep 05, 2024</div></div>
+      <div class="dev-meta-item"><div class="dev-meta-label">Last Updated</div><div class="dev-meta-val">Sep 07, 2024</div></div>
+      <div class="dev-meta-item"><div class="dev-meta-label">MSS Analyst</div><div class="dev-meta-val">R. Chen (Email Security)</div></div>
+      <div class="dev-meta-item"><div class="dev-meta-label">Related Alert</div><div class="dev-meta-val">ALT-2024-0893 (Critical)</div></div>
+    </div>
+  </div>
+
+  <div class="uuif-card">
+    <div class="uuif-card-hd"><div class="uuif-card-title">Ticket Thread</div></div>
+    <div class="uuif-card-bd">
+
+      <div class="tnote tnote--mss">
+        <div class="tnote-meta"><strong>R. Chen — SonicWall MSS Email Security</strong> &nbsp;·&nbsp; Sep 05, 2024 at 09:20 AM</div>
+        <div class="tnote-text">We have identified an active spear-phishing campaign targeting Fabrikam Logistics finance team members. The campaign has the following characteristics:
+
+— 14 delivery attempts blocked in the last 48 hours
+— Emails impersonating CEO requesting wire transfer approvals
+— Sophisticated BEC attack with spoofed display names matching legitimate contacts
+— 2 messages were delivered before Avanan policy was updated
+
+Current actions taken:
+✓ Added sender domains to block list
+✓ Retroactively removed delivered messages from mailboxes
+✓ Updated BEC detection rules
+
+Recommendation: Brief your finance team to verify all wire transfer requests via phone before processing.</div>
+      </div>
+
+      <div class="tnote tnote--partner">
+        <div class="tnote-meta"><strong>Demo Engineer — Northwind Security Group</strong> &nbsp;·&nbsp; Sep 06, 2024 at 11:04 AM</div>
+        <div class="tnote-text">Thank you for the quick response. We have notified the Fabrikam finance director and they have confirmed no fraudulent transfers occurred.
+
+Can you provide a full list of the blocked sender domains so we can share with the customer?</div>
+      </div>
+
+      <div class="tnote tnote--mss">
+        <div class="tnote-meta"><strong>R. Chen — SonicWall MSS Email Security</strong> &nbsp;·&nbsp; Sep 07, 2024 at 08:30 AM</div>
+        <div class="tnote-text">We are compiling the full IOC (Indicator of Compromise) report including all blocked domains, sender IPs, and email subjects. This will be included in the next monthly MSS report. No further action is required from your side at this time — we are actively monitoring.</div>
+      </div>
+
+      <div class="treply">
+        <div class="treply-label">Your Reply</div>
+        <textarea class="uuif-input w-full" rows="4" placeholder="Type your response here…"></textarea>
+        <div class="treply-actions">
+          <button class="uuif-btn">Save Draft</button>
+          <button class="uuif-btn uuif-btn--primary">Send Reply</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section><!-- /ticket-700102 -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE: reports
+     ═══════════════════════════════════════════════════════════ -->
+<section data-page="reports" hidden>
+  <div class="pg-head">
+    <h1>MSS Reports</h1>
+    <p>Monthly and on-demand security posture reports for your customers</p>
+  </div>
+
+  <div class="pg-2col mb-5">
+    <!-- SOC activity funnel -->
+    <div class="uuif-card">
+      <div class="uuif-card-hd"><div class="uuif-card-title">SOC Activity — Last 30 Days</div></div>
+      <div class="uuif-card-bd">
+        <div class="funnel">
+          <div class="frow">
+            <div class="fbar f0" style="width:100%"><span class="fn">48,213</span></div>
+            <span class="flab">Detections screened</span>
+          </div>
+          <div class="frow">
+            <div class="fbar f1" style="width:82%"><span class="fn">39,543</span></div>
+            <span class="flab">Events analyzed</span>
+          </div>
+          <div class="frow">
+            <div class="fbar f2" style="width:30%"><span class="fn">1,204</span></div>
+            <span class="flab">Investigated</span>
+          </div>
+          <div class="frow">
+            <div class="fbar f3" style="width:10%"><span class="fn">86</span></div>
+            <span class="flab">Escalated</span>
+          </div>
+          <div class="frow">
+            <div class="fbar f4" style="width:4%"><span class="fn">12</span></div>
+            <span class="flab">Alerts raised</span>
+          </div>
+        </div>
+        <div class="funnel-ft">4 tickets created · 10 alerts fully resolved</div>
+      </div>
+    </div>
+
+    <!-- Stats summary -->
+    <div>
+      <div class="rpt-stats">
+        <div class="rpt-stat"><div class="n num">18<span class="u"> min</span></div><div class="l">Avg. notification time<br>(threat to partner contact)</div></div>
+        <div class="rpt-stat"><div class="n num g">99.9<span class="u">%</span></div><div class="l">FW uptime across<br>all managed units</div></div>
+      </div>
+      <div class="rpt-stats">
+        <div class="rpt-stat"><div class="n num">0</div><div class="l">Data breach<br>incidents confirmed</div></div>
+        <div class="rpt-stat"><div class="n num">48,213</div><div class="l">Total detections<br>screened by SOC</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent reports table -->
+  <div class="uuif-card mb-5">
+    <div class="uuif-card-hd">
+      <div class="uuif-card-title">Available Reports</div>
+      <div class="uuif-card-hd-actions"><button class="uuif-btn uuif-btn--sm uuif-btn--primary">Generate Report</button></div>
+    </div>
+    <div class="uuif-card-bd--flush">
+      <div class="uuif-table-scroll">
+        <table class="uuif-table">
+          <thead><tr><th>Report</th><th>Period</th><th>Customer</th><th>Generated</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td class="tt-name">Monthly Security Summary</td><td>Aug 2024</td><td>All Customers</td><td class="muted small">Sep 01, 2024</td><td><button class="uuif-btn uuif-btn--sm">Download PDF</button></td></tr>
+            <tr><td class="tt-name">Monthly Security Summary</td><td>Aug 2024</td><td>Contoso Dental Partners</td><td class="muted small">Sep 01, 2024</td><td><button class="uuif-btn uuif-btn--sm">Download PDF</button></td></tr>
+            <tr><td class="tt-name">Monthly Security Summary</td><td>Aug 2024</td><td>Fabrikam Logistics</td><td class="muted small">Sep 01, 2024</td><td><button class="uuif-btn uuif-btn--sm">Download PDF</button></td></tr>
+            <tr><td class="tt-name">Incident Report — ALT-2024-0891</td><td>Sep 2024</td><td>Contoso Dental Partners</td><td class="muted small">Sep 07, 2024</td><td><button class="uuif-btn uuif-btn--sm">Download PDF</button></td></tr>
+            <tr><td class="tt-name">Quarterly Executive Summary</td><td>Q2 2024</td><td>All Customers</td><td class="muted small">Jul 05, 2024</td><td><button class="uuif-btn uuif-btn--sm">Download PDF</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section><!-- /reports -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE: contacts
+     ═══════════════════════════════════════════════════════════ -->
+<section data-page="contacts" hidden>
+  <div class="pg-head">
+    <h1>Contacts</h1>
+    <p>Partner and customer contacts associated with this MSS engagement</p>
+  </div>
+
+  <div class="uuif-sub-title-pane mb-4">
+    <div class="uuif-sub-title-pane-text">Northwind Security Group — Partner Contacts</div>
+    <div class="uuif-sub-title-pane-flex"></div>
+    <button class="uuif-btn uuif-btn--sm uuif-btn--primary">+ Add Contact</button>
+  </div>
+
+  <div class="uuif-card mb-5">
+    <div class="uuif-card-bd--flush">
+      <div class="uuif-table-scroll">
+        <table class="uuif-table">
+          <thead><tr><th>Name</th><th>Role</th><th>Email</th><th>Phone</th><th>Notifications</th></tr></thead>
+          <tbody>
+            <tr><td class="tt-name">Demo Engineer</td><td>Technical Account Manager</td><td>engineer@sonicwall.com</td><td>+1 (408) 555-0100</td><td><span class="uuif-chip uuif-chip--success">Alerts &amp; Tickets</span></td></tr>
+            <tr><td class="tt-name">Alex Martinez</td><td>Partner Account Executive</td><td>alex.m@northwindsg.com</td><td>+1 (408) 555-0200</td><td><span class="uuif-chip">Reports Only</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="uuif-sub-title-pane mb-4">
+    <div class="uuif-sub-title-pane-text">Customer Contacts</div>
+    <div class="uuif-sub-title-pane-flex"></div>
+    <button class="uuif-btn uuif-btn--sm">+ Add Customer Contact</button>
+  </div>
+
+  <div class="uuif-card">
+    <div class="uuif-card-bd--flush">
+      <div class="uuif-table-scroll">
+        <table class="uuif-table">
+          <thead><tr><th>Name</th><th>Customer</th><th>Role</th><th>Email</th><th>Notifications</th></tr></thead>
+          <tbody>
+            <tr><td class="tt-name">Sarah Johnson</td><td>Contoso Dental Partners</td><td>IT Director</td><td>sjohnson@contosodental.com</td><td><span class="uuif-chip uuif-chip--success">All</span></td></tr>
+            <tr><td class="tt-name">Mike Torres</td><td>Fabrikam Logistics</td><td>CISO</td><td>mtorres@fabrikam.com</td><td><span class="uuif-chip uuif-chip--success">All</span></td></tr>
+            <tr><td class="tt-name">Linda Park</td><td>Tailspin Credit Union</td><td>IT Manager</td><td>lpark@tailspin.com</td><td><span class="uuif-chip">Critical Only</span></td></tr>
+            <tr><td class="tt-name">Kevin Walsh</td><td>Wingtip Toys Retail</td><td>IT Admin</td><td>kwalsh@wingtiptoys.com</td><td><span class="uuif-chip">All</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section><!-- /contacts -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE: fw-list (MPSS Firewall Units)
+     ═══════════════════════════════════════════════════════════ -->
+<section data-page="fw-list" hidden>
+  <div class="pg-head">
+    <h1>MPSS — Firewall Units</h1>
+    <p>All managed perimeter security firewall appliances</p>
+  </div>
+
+  <div class="uuif-count-grid mb-5">
+    <div class="uuif-count uuif-count--ok"><div class="uuif-count-head"><span class="uuif-count-label">Total Units</span></div><div class="uuif-count-value num">5</div></div>
+    <div class="uuif-count uuif-count--ok"><div class="uuif-count-head"><span class="uuif-count-label">Online</span></div><div class="uuif-count-value num">5</div></div>
+    <div class="uuif-count"><div class="uuif-count-head"><span class="uuif-count-label">Needs Attention</span></div><div class="uuif-count-value num">0</div></div>
+    <div class="uuif-count"><div class="uuif-count-head"><span class="uuif-count-label">Avg. Uptime</span></div><div class="uuif-count-value num">99.9<span style="font-size:14px;font-weight:400">%</span></div></div>
+  </div>
+
+  <div class="uuif-card">
+    <div class="uuif-card-bd--flush">
+      <div class="uuif-table-scroll">
+        <table class="uuif-table">
+          <thead><tr><th>Unit Name</th><th>Customer</th><th>Model</th><th>Firmware</th><th>Status</th><th>Uptime</th><th>Threats Blocked</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr class="clickable" onclick="navigate('fw-detail')">
+              <td class="tt-name">contoso-edge-01</td><td>Contoso Dental Partners</td><td>TZ470</td><td>7.1.2-7019</td>
+              <td><span class="sta-cell"><span class="sta-dot online"></span>Online</span></td>
+              <td class="num">99.98%</td><td class="num">1,204</td>
+              <td><button class="uuif-btn uuif-btn--sm" onclick="event.stopPropagation();navigate('fw-detail')">Details</button></td>
+            </tr>
+            <tr class="clickable" onclick="navigate('fw-detail')">
+              <td class="tt-name">contoso-edge-02</td><td>Contoso Dental Partners</td><td>TZ370</td><td>7.1.2-7019</td>
+              <td><span class="sta-cell"><span class="sta-dot online"></span>Online</span></td>
+              <td class="num">99.95%</td><td class="num">876</td>
+              <td><button class="uuif-btn uuif-btn--sm" onclick="event.stopPropagation();navigate('fw-detail')">Details</button></td>
+            </tr>
+            <tr class="clickable" onclick="navigate('fw-detail')">
+              <td class="tt-name">fabrikam-hq-fw</td><td>Fabrikam Logistics</td><td>NSa 2700</td><td>7.1.2-7019</td>
+              <td><span class="sta-cell"><span class="sta-dot online"></span>Online</span></td>
+              <td class="num">100%</td><td class="num">2,102</td>
+              <td><button class="uuif-btn uuif-btn--sm" onclick="event.stopPropagation();navigate('fw-detail')">Details</button></td>
+            </tr>
+            <tr class="clickable" onclick="navigate('fw-detail')">
+              <td class="tt-name">wingtip-store-fw</td><td>Wingtip Toys Retail</td><td>TZ270</td><td>7.0.1-5095</td>
+              <td><span class="sta-cell"><span class="sta-dot warn"></span>Upgrade Avail.</span></td>
+              <td class="num">99.9%</td><td class="num">431</td>
+              <td><button class="uuif-btn uuif-btn--sm" onclick="event.stopPropagation();navigate('fw-detail')">Details</button></td>
+            </tr>
+            <tr class="clickable" onclick="navigate('fw-detail')">
+              <td class="tt-name">tailspin-dc-fw</td><td>Tailspin Credit Union</td><td>NSa 3700</td><td>7.1.2-7019</td>
+              <td><span class="sta-cell"><span class="sta-dot online"></span>Online</span></td>
+              <td class="num">100%</td><td class="num">3,891</td>
+              <td><button class="uuif-btn uuif-btn--sm" onclick="event.stopPropagation();navigate('fw-detail')">Details</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section><!-- /fw-list -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE: fw-detail (example: contoso-edge-01 TZ470)
+     ═══════════════════════════════════════════════════════════ -->
+<section data-page="fw-detail" hidden>
+
+  <div class="back-row mb-5">
+    <button class="uuif-btn uuif-btn--sm" onclick="navigate('fw-list')">← Back to Firewall Units</button>
+    <h1>contoso-edge-01</h1>
+    <span class="sta-cell" style="margin-left:8px"><span class="sta-dot online"></span><span style="color:var(--uuif-brand-green);font-weight:600">Online</span></span>
+  </div>
+
+  <div class="dev-meta-grid mb-5">
+    <div class="dev-meta-item"><div class="dev-meta-label">Customer</div><div class="dev-meta-val">Contoso Dental Partners</div></div>
+    <div class="dev-meta-item"><div class="dev-meta-label">Model</div><div class="dev-meta-val">SonicWall TZ470</div></div>
+    <div class="dev-meta-item"><div class="dev-meta-label">Serial Number</div><div class="dev-meta-val">C0AEA15001234</div></div>
+    <div class="dev-meta-item"><div class="dev-meta-label">Firmware</div><div class="dev-meta-val ok">7.1.2-7019 (Current)</div></div>
+    <div class="dev-meta-item"><div class="dev-meta-label">Uptime (30d)</div><div class="dev-meta-val ok">99.98%</div></div>
+    <div class="dev-meta-item"><div class="dev-meta-label">Last Check-In</div><div class="dev-meta-val">Sep 08, 2024 · 11:42 AM</div></div>
+    <div class="dev-meta-item"><div class="dev-meta-label">WAN IP</div><div class="dev-meta-val">203.0.113.45</div></div>
+    <div class="dev-meta-item"><div class="dev-meta-label">Location</div><div class="dev-meta-val">Contoso HQ — Primary Edge</div></div>
+  </div>
+
+  <div class="pg-2col">
+    <div class="uuif-card">
+      <div class="uuif-card-hd"><div class="uuif-card-title">Security Activity (30d)</div></div>
+      <div class="uuif-card-bd">
+        <div class="funnel">
+          <div class="frow"><div class="fbar f0" style="width:100%"><span class="fn">1,204</span></div><span class="flab">Threats blocked</span></div>
+          <div class="frow"><div class="fbar f1" style="width:60%"><span class="fn">724</span></div><span class="flab">IPS intrusions</span></div>
+          <div class="frow"><div class="fbar f2" style="width:28%"><span class="fn">338</span></div><span class="flab">Malware blocked</span></div>
+          <div class="frow"><div class="fbar f3" style="width:12%"><span class="fn">142</span></div><span class="flab">App control</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="uuif-card">
+      <div class="uuif-card-hd"><div class="uuif-card-title">Services Status</div></div>
+      <div class="uuif-card-bd--flush">
+        <div class="acct-row"><span class="k">Gateway Anti-Virus</span><span class="uuif-chip uuif-chip--success">Active</span></div>
+        <div class="acct-row"><span class="k">Intrusion Prevention</span><span class="uuif-chip uuif-chip--success">Active</span></div>
+        <div class="acct-row"><span class="k">App Intelligence</span><span class="uuif-chip uuif-chip--success">Active</span></div>
+        <div class="acct-row"><span class="k">Capture ATP</span><span class="uuif-chip uuif-chip--success">Active</span></div>
+        <div class="acct-row"><span class="k">Content Filtering</span><span class="uuif-chip uuif-chip--success">Active</span></div>
+        <div class="acct-row"><span class="k">Anti-Spam</span><span class="uuif-chip uuif-chip--success">Active</span></div>
+      </div>
+    </div>
+  </div>
+
+</section><!-- /fw-detail -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE: capture-client
+     ═══════════════════════════════════════════════════════════ -->
+<section data-page="capture-client" hidden>
+  <div class="pg-head">
+    <h1>Capture Client — Endpoint Security</h1>
+    <p>Managed endpoint detection and response across all customers</p>
+  </div>
+
+  <div class="uuif-count-grid mb-5">
+    <div class="uuif-count uuif-count--ok"><div class="uuif-count-head"><span class="uuif-count-label">Total Endpoints</span></div><div class="uuif-count-value num">190</div></div>
+    <div class="uuif-count uuif-count--error"><div class="uuif-count-head"><span class="uuif-count-label">Needs Attention</span></div><div class="uuif-count-value num">1</div></div>
+    <div class="uuif-count"><div class="uuif-count-head"><span class="uuif-count-label">Threats Blocked (30d)</span></div><div class="uuif-count-value num">47</div></div>
+    <div class="uuif-count uuif-count--ok"><div class="uuif-count-head"><span class="uuif-count-label">Coverage</span></div><div class="uuif-count-value num">100<span style="font-size:14px;font-weight:400">%</span></div></div>
+  </div>
+
+  <div class="uuif-banner uuif-banner--warning mb-5">
+    <div class="uuif-banner-icon">!</div>
+    <div>
+      <div class="uuif-banner-title">Contoso Dental Partners — 1 Endpoint Requires Review</div>
+      <div class="uuif-banner-text">Workstation DC-WKS-12 (contoso-edge-01 network) has a threat that was quarantined but requires manual verification. Trojan downloader detected Aug 28.</div>
+    </div>
+  </div>
+
+  <div class="uuif-card">
+    <div class="uuif-card-hd">
+      <div class="uuif-card-title">Endpoint Summary by Customer</div>
+    </div>
+    <div class="uuif-card-bd--flush">
+      <div class="uuif-table-scroll">
+        <table class="uuif-table">
+          <thead><tr><th>Customer</th><th>Endpoints</th><th>Online</th><th>Threats Blocked</th><th>Needs Attention</th><th>OS Coverage</th></tr></thead>
+          <tbody>
+            <tr class="attn-warn">
+              <td class="tt-name">Contoso Dental Partners</td>
+              <td class="num">75</td><td class="num">73</td><td class="num">23</td>
+              <td><span class="uuif-chip uuif-chip--error">1 endpoint</span></td>
+              <td><span class="uuif-chip uuif-chip--success">Win 100%</span></td>
+            </tr>
+            <tr>
+              <td class="tt-name">Fabrikam Logistics</td>
+              <td class="num">60</td><td class="num">60</td><td class="num">18</td>
+              <td><span class="uuif-chip uuif-chip--success">None</span></td>
+              <td><span class="uuif-chip uuif-chip--success">Win 100%</span></td>
+            </tr>
+            <tr>
+              <td class="tt-name">Tailspin Credit Union</td>
+              <td class="num">30</td><td class="num">30</td><td class="num">4</td>
+              <td><span class="uuif-chip uuif-chip--success">None</span></td>
+              <td><span class="uuif-chip uuif-chip--success">Win 100%</span></td>
+            </tr>
+            <tr>
+              <td class="tt-name">Wingtip Toys Retail</td>
+              <td class="num">25</td><td class="num">24</td><td class="num">2</td>
+              <td><span class="uuif-chip uuif-chip--success">None</span></td>
+              <td><span class="uuif-chip uuif-chip--success">Win 100%</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section><!-- /capture-client -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE: cloud-avanan
+     ═══════════════════════════════════════════════════════════ -->
+<section data-page="cloud-avanan" hidden>
+  <div class="pg-head">
+    <h1>Avanan — Cloud Email Security</h1>
+    <p>Managed cloud email security across all enrolled tenants</p>
+  </div>
+
+  <div class="uuif-count-grid mb-5">
+    <div class="uuif-count uuif-count--ok"><div class="uuif-count-head"><span class="uuif-count-label">Tenants</span></div><div class="uuif-count-value num">3</div></div>
+    <div class="uuif-count"><div class="uuif-count-head"><span class="uuif-count-label">Emails Blocked (30d)</span></div><div class="uuif-count-value num">1,847</div></div>
+    <div class="uuif-count"><div class="uuif-count-head"><span class="uuif-count-label">Phishing Stopped</span></div><div class="uuif-count-value num">214</div></div>
+    <div class="uuif-count uuif-count--ok"><div class="uuif-count-head"><span class="uuif-count-label">Needs Attention</span></div><div class="uuif-count-value num">0</div></div>
+  </div>
+
+  <div class="uuif-card">
+    <div class="uuif-card-hd"><div class="uuif-card-title">Tenant Summary</div></div>
+    <div class="uuif-card-bd--flush">
+      <div class="uuif-table-scroll">
+        <table class="uuif-table">
+          <thead><tr><th>Customer</th><th>Platform</th><th>Status</th><th>Mailboxes</th><th>Emails Blocked</th><th>Phishing</th><th>BEC Attempts</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="tt-name">Contoso Dental Partners</td><td>Microsoft 365</td>
+              <td><span class="sta-cell"><span class="sta-dot online"></span>Active</span></td>
+              <td class="num">85</td><td class="num">742</td><td class="num">112</td><td class="num">14</td>
+            </tr>
+            <tr>
+              <td class="tt-name">Fabrikam Logistics</td><td>Microsoft 365</td>
+              <td><span class="sta-cell"><span class="sta-dot online"></span>Active</span></td>
+              <td class="num">120</td><td class="num">893</td><td class="num">84</td><td class="num">14</td>
+            </tr>
+            <tr>
+              <td class="tt-name">Tailspin Credit Union</td><td>Microsoft 365</td>
+              <td><span class="sta-cell"><span class="sta-dot online"></span>Active</span></td>
+              <td class="num">45</td><td class="num">212</td><td class="num">18</td><td class="num">0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section><!-- /cloud-avanan -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE: network-mdr
+     ═══════════════════════════════════════════════════════════ -->
+<section data-page="network-mdr" hidden>
+  <div class="pg-head">
+    <h1>MDR Network — Network Detection</h1>
+    <p>Network sensors and managed detection &amp; response across all enrolled customers</p>
+  </div>
+
+  <div class="uuif-count-grid mb-5">
+    <div class="uuif-count uuif-count--ok"><div class="uuif-count-head"><span class="uuif-count-label">Active Sensors</span></div><div class="uuif-count-value num">3</div></div>
+    <div class="uuif-count"><div class="uuif-count-head"><span class="uuif-count-label">Events Analyzed (30d)</span></div><div class="uuif-count-value num">94,211</div></div>
+    <div class="uuif-count"><div class="uuif-count-head"><span class="uuif-count-label">Threats Detected</span></div><div class="uuif-count-value num">8</div></div>
+    <div class="uuif-count uuif-count--ok"><div class="uuif-count-head"><span class="uuif-count-label">Needs Attention</span></div><div class="uuif-count-value num">0</div></div>
+  </div>
+
+  <div class="uuif-card">
+    <div class="uuif-card-hd"><div class="uuif-card-title">Network Sensor Status</div></div>
+    <div class="uuif-card-bd--flush">
+      <div class="uuif-table-scroll">
+        <table class="uuif-table">
+          <thead><tr><th>Sensor</th><th>Customer</th><th>Location</th><th>Status</th><th>Events (30d)</th><th>Threats Detected</th><th>Last Seen</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="tt-name">contoso-ndr-01</td><td>Contoso Dental Partners</td><td>HQ Network Core</td>
+              <td><span class="sta-cell"><span class="sta-dot online"></span>Online</span></td>
+              <td class="num">41,203</td><td class="num">5</td><td class="muted small">5 min ago</td>
+            </tr>
+            <tr>
+              <td class="tt-name">tailspin-ndr-01</td><td>Tailspin Credit Union</td><td>Data Center</td>
+              <td><span class="sta-cell"><span class="sta-dot online"></span>Online</span></td>
+              <td class="num">38,994</td><td class="num">3</td><td class="muted small">2 min ago</td>
+            </tr>
+            <tr>
+              <td class="tt-name">wingtip-ndr-01</td><td>Wingtip Toys Retail</td><td>Retail Segment</td>
+              <td><span class="sta-cell"><span class="sta-dot online"></span>Online</span></td>
+              <td class="num">14,014</td><td class="num">0</td><td class="muted small">8 min ago</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section><!-- /network-mdr -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE: ask-sami
+     ═══════════════════════════════════════════════════════════ -->
+<section data-page="ask-sami" hidden>
+  <div class="pg-head">
+    <h1>Ask SAMI</h1>
+    <p>SonicWall AI — your intelligent security assistant</p>
+  </div>
+  <div class="uuif-card" style="max-width:700px;margin:0 auto">
+    <div class="uuif-card-hd"><div class="uuif-card-title">SAMI — Security AI Assistant</div></div>
+    <div class="uuif-card-bd">
+      <div class="tnote tnote--mss mb-4">
+        <div class="tnote-meta"><strong>SAMI</strong> &nbsp;·&nbsp; AI Assistant</div>
+        <div class="tnote-text">Hello! I'm SAMI — SonicWall's AI security assistant. I can help you:
+• Analyze security events and alerts for Northwind Security Group
+• Explain threat intelligence across your customer portfolio
+• Summarize recent SOC activity and open tickets
+• Answer questions about your managed security services
+
+What would you like to know?</div>
+      </div>
+      <textarea class="uuif-input w-full" rows="3" placeholder="Ask SAMI something… e.g. 'Summarize this week's critical alerts'"></textarea>
+      <div class="treply-actions" style="margin-top:var(--uuif-sp-3)">
+        <button class="uuif-btn uuif-btn--primary">Ask SAMI</button>
+      </div>
+    </div>
+  </div>
+</section><!-- /ask-sami -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE: support
+     ═══════════════════════════════════════════════════════════ -->
+<section data-page="support" hidden>
+  <div class="pg-head">
+    <h1>Support Resources</h1>
+    <p>SonicWall MSS support channels and documentation</p>
+  </div>
+  <div class="pg-3col">
+    <div class="uuif-card">
+      <div class="uuif-card-hd"><div class="uuif-card-title">SOC Hotline</div></div>
+      <div class="uuif-card-bd">
+        <p style="font:700 22px/1 var(--uuif-font-family);color:var(--uuif-brand-orange);margin-bottom:8px">1-888-MSS-HELP</p>
+        <p class="muted small">24/7 · Critical incident response</p>
+      </div>
+    </div>
+    <div class="uuif-card">
+      <div class="uuif-card-hd"><div class="uuif-card-title">Partner Portal</div></div>
+      <div class="uuif-card-bd">
+        <p class="muted small mb-3">Access product documentation, knowledge base, and training resources.</p>
+        <button class="uuif-btn uuif-btn--primary uuif-btn--sm">Open Portal</button>
+      </div>
+    </div>
+    <div class="uuif-card">
+      <div class="uuif-card-hd"><div class="uuif-card-title">Open New Case</div></div>
+      <div class="uuif-card-bd">
+        <p class="muted small mb-3">Submit a new support case or service request directly to MSS.</p>
+        <a href="#tickets" class="uuif-btn uuif-btn--sm">New Ticket →</a>
+      </div>
+    </div>
+  </div>
+</section><!-- /support -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE: customer-contoso
+     ═══════════════════════════════════════════════════════════ -->
+<section data-page="customer-contoso" hidden>
+  <div class="pg-head">
+    <h1>Contoso Dental Partners</h1>
+    <p>Customer security summary · 4 active managed services</p>
+  </div>
+
+  <div class="uuif-banner uuif-banner--error mb-5">
+    <div class="uuif-banner-icon">✕</div>
+    <div>
+      <div class="uuif-banner-title">Action Required — Ticket #700101 Overdue</div>
+      <div class="uuif-banner-text">Emergency firewall rule change awaiting your authorization for 3 days. <a href="#ticket-700101" onclick="navigate('ticket-700101');return false" style="color:var(--uuif-brand-orange);text-decoration:underline">Review ticket →</a></div>
+    </div>
+  </div>
+
+  <div class="uuif-count-grid mb-5">
+    <div class="uuif-count uuif-count--ok"><div class="uuif-count-head"><span class="uuif-count-label">Active Services</span></div><div class="uuif-count-value num">4</div></div>
+    <div class="uuif-count uuif-count--error"><div class="uuif-count-head"><span class="uuif-count-label">Open Tickets</span></div><div class="uuif-count-value num">1</div></div>
+    <div class="uuif-count"><div class="uuif-count-head"><span class="uuif-count-label">Alerts (30d)</span></div><div class="uuif-count-value num">5</div></div>
+    <div class="uuif-count uuif-count--ok"><div class="uuif-count-head"><span class="uuif-count-label">Threats Blocked</span></div><div class="uuif-count-value num">2,103</div></div>
+  </div>
+
+  <div class="pg-2col">
+    <div class="uuif-card">
+      <div class="uuif-card-hd"><div class="uuif-card-title">Active Services</div></div>
+      <div class="uuif-card-bd--flush">
+        <a class="svc-row" href="#fw-detail" onclick="navigate('fw-detail');return false">
+          <div class="svc-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10.3662 5.9248C9.63588 6.89856 8.47473 9.47839 9.67185 12.0068C11.1685 15.1675 14.221 19.72 7.69724 22.999C8.51029 19.6178 6.43943 17.2881C5.32224 15.1084C6.7465 8.17775 10.3662 5.9248ZM15.5 21.6895H11.9345C13.6006 17.5479H15.5V21.6895ZM18.3281 5.13574C23.7832 5.56445C14.1338 8.43848C11.6332 10.3919 16.459 13.4062C10.3222 9.78223C9.12114 6.62416 13.773 5.01024 18.3281 5.13574Z" fill="var(--uuif-icon-primary)"/></svg></div>
+          <div class="svc-info"><div class="svc-name">MPSS Firewalls</div><div class="svc-meta">contoso-edge-01 (TZ470) · contoso-edge-02 (TZ370)</div></div>
+          <div class="svc-ok">2 units · Healthy</div>
+        </a>
+        <a class="svc-row" href="#cloud-avanan" onclick="navigate('cloud-avanan');return false">
+          <div class="svc-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9.49966 2.66797C11.0092 2.66804 13.3708 4.44531C15.4997 3.84961C19.9997 8.86914C22.2632 9.36954 24.0006 13.6934C21.8844 18.418H5.72524C5.74203 17.4837 5.99966 17.1367C8.02593 14.409 21.4997 12.1182C15.0041 10.2995 1.23013 12.2363C1.66624 10.8899 3.99966 9.29395V8.80371C3.99975 5.41515 6.46232 2.66819 9.49966 2.66797Z" fill="var(--uuif-icon-primary)"/></svg></div>
+          <div class="svc-info"><div class="svc-name">Avanan Cloud Email</div><div class="svc-meta">Microsoft 365 · 85 mailboxes</div></div>
+          <div class="svc-ok">742 emails blocked</div>
+        </a>
+        <a class="svc-row" href="#capture-client" onclick="navigate('capture-client');return false">
+          <div class="svc-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M21.5 11.8281C21.5 14.5058 20.2318 17.0252 18.082 18.6191L12.1719 22.999C9.44336 15.1475C12.1074 13.0974 21.5 11.0059V11.8281ZM21.5 9.74121C16.7764 9.4082C9.72146 9.13166 2.86035 14.2715C2.5 11.8281V2L8.03711 2.61523C15.9629 2.61523L21.5 2V9.74121Z" fill="var(--uuif-icon-primary)"/></svg></div>
+          <div class="svc-info"><div class="svc-name">Capture Client</div><div class="svc-meta">75 endpoints</div></div>
+          <div class="svc-attn">1 needs attention</div>
+        </a>
+        <a class="svc-row" href="#network-mdr" onclick="navigate('network-mdr');return false">
+          <div class="svc-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3.375 2.24967C4.43359 2.19107C4.49219 3.24967C3.23647 4.65152C2.5 8.29849C3.23651 11.9454C4.43359 14.4069C4.12508 14.6832C1 8.29849C1.00018 6.00165 3.375 2.24967Z" fill="var(--uuif-icon-primary)"/></svg></div>
+          <div class="svc-info"><div class="svc-name">MDR Network</div><div class="svc-meta">contoso-ndr-01 · HQ Network Core</div></div>
+          <div class="svc-ok">41,203 events analyzed</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="uuif-card">
+      <div class="uuif-card-hd"><div class="uuif-card-title">Open Tickets</div></div>
+      <div class="uuif-card-bd--flush">
+        <div class="acct-row" style="cursor:pointer" onclick="navigate('ticket-700101')">
+          <div><div class="tt-name">#700101 — Emergency FW rule change</div><div class="muted small">MPSS · 3 days old</div></div>
+          <span class="uuif-chip uuif-chip--error">Overdue</span>
+        </div>
+      </div>
+      <div class="uuif-card-ft"><button class="uuif-btn uuif-btn--sm uuif-btn--primary" onclick="navigate('ticket-700101')">Respond Now →</button></div>
+    </div>
+  </div>
+</section><!-- /customer-contoso -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE: customer-fabrikam
+     ═══════════════════════════════════════════════════════════ -->
+<section data-page="customer-fabrikam" hidden>
+  <div class="pg-head">
+    <h1>Fabrikam Logistics</h1>
+    <p>Customer security summary · 3 active managed services</p>
+  </div>
+
+  <div class="uuif-count-grid mb-5">
+    <div class="uuif-count uuif-count--ok"><div class="uuif-count-head"><span class="uuif-count-label">Active Services</span></div><div class="uuif-count-value num">3</div></div>
+    <div class="uuif-count"><div class="uuif-count-head"><span class="uuif-count-label">Open Tickets</span></div><div class="uuif-count-value num">1</div></div>
+    <div class="uuif-count"><div class="uuif-count-head"><span class="uuif-count-label">Alerts (30d)</span></div><div class="uuif-count-value num">4</div></div>
+    <div class="uuif-count uuif-count--ok"><div class="uuif-count-head"><span class="uuif-count-label">Threats Blocked</span></div><div class="uuif-count-value num">3,871</div></div>
+  </div>
+
+  <div class="pg-2col">
+    <div class="uuif-card">
+      <div class="uuif-card-hd"><div class="uuif-card-title">Active Services</div></div>
+      <div class="uuif-card-bd--flush">
+        <div class="svc-row"><div class="svc-icon"></div><div class="svc-info"><div class="svc-name">MPSS Firewalls</div><div class="svc-meta">fabrikam-hq-fw (NSa2700) — HQ edge</div></div><div class="svc-ok">1 unit · Healthy</div></div>
+        <div class="svc-row"><div class="svc-icon"></div><div class="svc-info"><div class="svc-name">Avanan Cloud Email</div><div class="svc-meta">Microsoft 365 · 120 mailboxes</div></div><div class="svc-ok">893 emails blocked</div></div>
+        <div class="svc-row"><div class="svc-icon"></div><div class="svc-info"><div class="svc-name">Capture Client</div><div class="svc-meta">60 endpoints</div></div><div class="svc-ok">All healthy</div></div>
+      </div>
+    </div>
+    <div class="uuif-card">
+      <div class="uuif-card-hd"><div class="uuif-card-title">Open Tickets</div></div>
+      <div class="uuif-card-bd--flush">
+        <div class="acct-row" style="cursor:pointer" onclick="navigate('ticket-700102')">
+          <div><div class="tt-name">#700102 — Phishing campaign targeting finance</div><div class="muted small">Avanan · 1 day old</div></div>
+          <span class="uuif-chip">With MSS</span>
+        </div>
+      </div>
+      <div class="uuif-card-ft"><button class="uuif-btn uuif-btn--sm" onclick="navigate('ticket-700102')">View Ticket →</button></div>
+    </div>
+  </div>
+
+  <div class="uuif-card mt-0" style="margin-top:0">
+    <div class="uuif-card-hd"><div class="uuif-card-title">Upsell Opportunity</div></div>
+    <div class="uuif-card-bd">
+      <div class="uuif-banner uuif-banner--info" style="margin-bottom:0">
+        <div class="uuif-banner-icon">i</div>
+        <div>
+          <div class="uuif-banner-title">MDR Network not enrolled</div>
+          <div class="uuif-banner-text">Fabrikam Logistics is eligible for MDR Network sensor deployment. Given the recent phishing activity, network-level detection would provide additional coverage for their logistics infrastructure.</div>
+        </div>
+      </div>
+    </div>
+    <div class="uuif-card-ft"><button class="uuif-btn uuif-btn--primary uuif-btn--sm">Send Proposal to Fabrikam</button></div>
+  </div>
+</section><!-- /customer-fabrikam -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE: customer-tailspin
+     ═══════════════════════════════════════════════════════════ -->
+<section data-page="customer-tailspin" hidden>
+  <div class="pg-head">
+    <h1>Tailspin Credit Union</h1>
+    <p>Customer security summary · 3 active managed services</p>
+  </div>
+
+  <div class="uuif-count-grid mb-5">
+    <div class="uuif-count uuif-count--ok"><div class="uuif-count-head"><span class="uuif-count-label">Active Services</span></div><div class="uuif-count-value num">3</div></div>
+    <div class="uuif-count uuif-count--ok"><div class="uuif-count-head"><span class="uuif-count-label">Open Tickets</span></div><div class="uuif-count-value num">1</div></div>
+    <div class="uuif-count"><div class="uuif-count-head"><span class="uuif-count-label">Alerts (30d)</span></div><div class="uuif-count-value num">2</div></div>
+    <div class="uuif-count uuif-count--ok"><div class="uuif-count-head"><span class="uuif-count-label">Threats Blocked</span></div><div class="uuif-count-value num">4,207</div></div>
+  </div>
+
+  <div class="pg-2col">
+    <div class="uuif-card">
+      <div class="uuif-card-hd"><div class="uuif-card-title">Active Services</div></div>
+      <div class="uuif-card-bd--flush">
+        <div class="svc-row"><div class="svc-icon"></div><div class="svc-info"><div class="svc-name">Avanan Cloud Email</div><div class="svc-meta">Microsoft 365 · 45 mailboxes</div></div><div class="svc-ok">212 emails blocked</div></div>
+        <div class="svc-row"><div class="svc-icon"></div><div class="svc-info"><div class="svc-name">Capture Client</div><div class="svc-meta">30 endpoints</div></div><div class="svc-ok">All healthy</div></div>
+        <div class="svc-row"><div class="svc-icon"></div><div class="svc-info"><div class="svc-name">MDR Network</div><div class="svc-meta">tailspin-ndr-01 — Data Center</div></div><div class="svc-ok">38,994 events analyzed</div></div>
+      </div>
+    </div>
+    <div class="uuif-card">
+      <div class="uuif-card-hd"><div class="uuif-card-title">Open Tickets</div></div>
+      <div class="uuif-card-bd--flush">
+        <div class="acct-row" onclick="navigate('tickets')">
+          <div><div class="tt-name">#700103 — Monthly maintenance window</div><div class="muted small">MPSS · 6 hours old</div></div>
+          <span class="uuif-chip">With MSS</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="uuif-card" style="margin-top:var(--uuif-sp-5)">
+    <div class="uuif-card-hd"><div class="uuif-card-title">Upsell Opportunity</div></div>
+    <div class="uuif-card-bd">
+      <div class="uuif-banner uuif-banner--info" style="margin-bottom:0">
+        <div class="uuif-banner-icon">i</div>
+        <div>
+          <div class="uuif-banner-title">MPSS Firewalls not enrolled</div>
+          <div class="uuif-banner-text">Tailspin Credit Union is a financial institution without managed perimeter firewall protection. MPSS enrollment would significantly improve their security posture for compliance (PCI-DSS, SOX).</div>
+        </div>
+      </div>
+    </div>
+    <div class="uuif-card-ft"><button class="uuif-btn uuif-btn--primary uuif-btn--sm">Send MPSS Proposal</button></div>
+  </div>
+</section><!-- /customer-tailspin -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE: customer-wingtip
+     ═══════════════════════════════════════════════════════════ -->
+<section data-page="customer-wingtip" hidden>
+  <div class="pg-head">
+    <h1>Wingtip Toys Retail</h1>
+    <p>Customer security summary · 3 active managed services</p>
+  </div>
+
+  <div class="uuif-count-grid mb-5">
+    <div class="uuif-count uuif-count--ok"><div class="uuif-count-head"><span class="uuif-count-label">Active Services</span></div><div class="uuif-count-value num">3</div></div>
+    <div class="uuif-count uuif-count--ok"><div class="uuif-count-head"><span class="uuif-count-label">Open Tickets</span></div><div class="uuif-count-value num">1</div></div>
+    <div class="uuif-count"><div class="uuif-count-head"><span class="uuif-count-label">Alerts (30d)</span></div><div class="uuif-count-value num">1</div></div>
+    <div class="uuif-count uuif-count--ok"><div class="uuif-count-head"><span class="uuif-count-label">Threats Blocked</span></div><div class="uuif-count-value num">445</div></div>
+  </div>
+
+  <div class="uuif-banner uuif-banner--warning mb-5">
+    <div class="uuif-banner-icon">!</div>
+    <div>
+      <div class="uuif-banner-title">Firmware Upgrade Pending — wingtip-store-fw</div>
+      <div class="uuif-banner-text">TZ270 is running firmware 7.0.1-5095. Upgrade to 7.1.3 is scheduled via Ticket #700104. </div>
+    </div>
+  </div>
+
+  <div class="pg-2col">
+    <div class="uuif-card">
+      <div class="uuif-card-hd"><div class="uuif-card-title">Active Services</div></div>
+      <div class="uuif-card-bd--flush">
+        <div class="svc-row"><div class="svc-icon"></div><div class="svc-info"><div class="svc-name">MPSS Firewalls</div><div class="svc-meta">wingtip-store-fw (TZ270) — Retail edge</div></div><div class="svc-attn">Firmware outdated</div></div>
+        <div class="svc-row"><div class="svc-icon"></div><div class="svc-info"><div class="svc-name">Capture Client</div><div class="svc-meta">25 endpoints</div></div><div class="svc-ok">All healthy</div></div>
+        <div class="svc-row"><div class="svc-icon"></div><div class="svc-info"><div class="svc-name">MDR Network</div><div class="svc-meta">wingtip-ndr-01 — Retail segment</div></div><div class="svc-ok">14,014 events analyzed</div></div>
+      </div>
+    </div>
+    <div class="uuif-card">
+      <div class="uuif-card-hd"><div class="uuif-card-title">Open Tickets</div></div>
+      <div class="uuif-card-bd--flush">
+        <div class="acct-row" onclick="navigate('tickets')" style="cursor:pointer">
+          <div><div class="tt-name">#700104 — TZ270 firmware upgrade</div><div class="muted small">MPSS · Scheduled · 2 hours old</div></div>
+          <span class="uuif-chip uuif-chip--success">Scheduled</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section><!-- /customer-wingtip -->
+
+
+<!-- ── Patch routing for customer pages ──────────────────────── -->
+<script>
+(function () {
+  const extra = {
+    'customer-contoso':  { nav:'dashboard', label:'Contoso Dental Partners',  prod:'MSS Dashboard' },
+    'customer-fabrikam': { nav:'dashboard', label:'Fabrikam Logistics',        prod:'MSS Dashboard' },
+    'customer-tailspin': { nav:'dashboard', label:'Tailspin Credit Union',     prod:'MSS Dashboard' },
+    'customer-wingtip':  { nav:'dashboard', label:'Wingtip Toys Retail',       prod:'MSS Dashboard' }
+  };
+  /* inject into the routing tables via script patch */
+  Object.keys(extra).forEach(function(pg) {
+    window.__PAGE_NAV_EXTRA   = window.__PAGE_NAV_EXTRA   || {};
+    window.__PAGE_LABEL_EXTRA = window.__PAGE_LABEL_EXTRA || {};
+    window.__PAGE_NAV_EXTRA[pg]   = extra[pg].nav;
+    window.__PAGE_LABEL_EXTRA[pg] = extra[pg].label;
+  });
+
+  /* patch scope dropdown to navigate to customer pages */
+  const dropdown = document.getElementById('scope-dropdown');
+  const trigger  = document.getElementById('scope-trigger');
+  const scopeLabel = document.getElementById('scope-label');
+  if (dropdown) {
+    const orig = dropdown.onclick;
+    dropdown.addEventListener('click', function (e) {
+      const item = e.target.closest('[data-scope]');
+      if (!item) return;
+      const map = {
+        'global':   'overview',
+        'contoso':  'customer-contoso',
+        'fabrikam': 'customer-fabrikam',
+        'tailspin': 'customer-tailspin',
+        'wingtip':  'customer-wingtip'
+      };
+      const names = {
+        'global':'All Customers (Global)',
+        'contoso':'Contoso Dental Partners',
+        'fabrikam':'Fabrikam Logistics',
+        'tailspin':'Tailspin Credit Union',
+        'wingtip':'Wingtip Toys Retail'
+      };
+      dropdown.querySelectorAll('.uuif-scope-item').forEach(i => i.classList.remove('sel'));
+      item.classList.add('sel');
+      if (scopeLabel) scopeLabel.textContent = names[item.dataset.scope] || 'All Customers (Global)';
+      dropdown.classList.remove('open');
+      trigger.classList.remove('open');
+      trigger.setAttribute('aria-expanded', 'false');
+      const dest = map[item.dataset.scope];
+      if (dest) {
+        window.navigate(dest);
+        /* update breadcrumb for customer pages (routing IIFE uses local PAGE_LABEL) */
+        setTimeout(function () {
+          const crumb = document.getElementById('crumb-cur');
+          if (crumb && item.dataset.scope !== 'global') {
+            crumb.textContent = names[item.dataset.scope] || crumb.textContent;
+          }
+        }, 20);
+      }
+    }, true); /* capture phase to run before the main handler */
+  }
+
+  /* extend activate() to handle customer pages */
+  const _origActivate = window._activate;
+  const origHash = window.location.hash;
+  /* the main router already handles hash changes; just ensure
+     unknown pages fall back to overview gracefully — already handled. */
+}());
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════
+     ROUTING JAVASCRIPT
+     ═══════════════════════════════════════════════════════════ -->
+<script>
+(function () {
+
+  /* ── page → nav mapping ─────────────────────────────────── */
+  const PAGE_NAV = {
+    'overview':'dashboard','coverage':'dashboard','alerts':'dashboard',
+    'tickets':'dashboard','ticket-700101':'dashboard','ticket-700102':'dashboard',
+    'reports':'dashboard','contacts':'dashboard',
+    'fw-list':'firewalls','fw-detail':'firewalls',
+    'capture-client':'capture','cloud-avanan':'cloud','network-mdr':'network',
+    'ask-sami':'sami','support':'support'
+  };
+
+  /* ── page → breadcrumb label ────────────────────────────── */
+  const PAGE_LABEL = {
+    'overview':'MSS Overview','coverage':'Coverage','alerts':'SOC Alerts',
+    'tickets':'Tickets','ticket-700101':'Ticket #700101','ticket-700102':'Ticket #700102',
+    'reports':'Reports','contacts':'Contacts',
+    'fw-list':'Firewall Units','fw-detail':'FW Detail',
+    'capture-client':'Capture Client','cloud-avanan':'Avanan Cloud',
+    'network-mdr':'MDR Network','ask-sami':'Ask SAMI','support':'Support Resources'
+  };
+
+  /* ── subnav product label ───────────────────────────────── */
+  const NAV_PRODUCT = {
+    'dashboard':'MSS Dashboard','firewalls':'Firewalls',
+    'capture':'Capture Client','cloud':'Cloud Security',
+    'network':'MDR Network','sami':'Ask SAMI','support':'Support'
+  };
+
+  let current = null;
+
+  function navigate(page) {
+    window.location.hash = '#' + page;
+  }
+  window.navigate = navigate;
+
+  function toggleFilter(btn) {
+    const bar = btn.closest('.filter-bar');
+    bar.querySelectorAll('.fpill').forEach(b => b.classList.remove('is-on'));
+    btn.classList.add('is-on');
+  }
+  window.toggleFilter = toggleFilter;
+
+  function activate(page) {
+    if (!page) page = 'overview';
+    if (!document.querySelector('[data-page="' + page + '"]')) page = 'overview';
+    if (page === current) return;
+    current = page;
+
+    /* hide all sections */
+    document.querySelectorAll('[data-page]').forEach(s => s.setAttribute('hidden',''));
+    /* show target */
+    const target = document.querySelector('[data-page="' + page + '"]');
+    if (target) target.removeAttribute('hidden');
+
+    /* nav rail */
+    const navKey = PAGE_NAV[page] || 'dashboard';
+    document.querySelectorAll('[data-nav]').forEach(n => n.classList.remove('is-selected'));
+    const navEl = document.querySelector('[data-nav="' + navKey + '"]');
+    if (navEl) navEl.classList.add('is-selected');
+
+    /* subnav groups */
+    ['dashboard','firewalls','capture','cloud','network','sami','support'].forEach(g => {
+      const el = document.getElementById('snav-' + g);
+      if (el) el.hidden = (g !== navKey);
+    });
+
+    /* subnav active link */
+    document.querySelectorAll('[data-subnav]').forEach(a => a.classList.remove('is-active'));
+    const snEl = document.querySelector('[data-subnav="' + page + '"]');
+    if (snEl) snEl.classList.add('is-active');
+
+    /* breadcrumb */
+    const crumb = document.getElementById('crumb-cur');
+    if (crumb) crumb.textContent = PAGE_LABEL[page] || page;
+
+    /* subnav tab title */
+    const tabTitle = document.getElementById('subnav-tab-title');
+    if (tabTitle) tabTitle.textContent = NAV_PRODUCT[navKey] || 'MSS Dashboard';
+
+    /* scroll to top */
+    const pc = document.getElementById('page-content');
+    if (pc) pc.scrollTop = 0;
+  }
+
+  /* ── scope selector ─────────────────────────────────────── */
+  const trigger   = document.getElementById('scope-trigger');
+  const dropdown  = document.getElementById('scope-dropdown');
+  const scopeLabel = document.getElementById('scope-label');
+
+  if (trigger && dropdown) {
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      const open = dropdown.classList.toggle('open');
+      trigger.classList.toggle('open', open);
+      trigger.setAttribute('aria-expanded', open);
+    });
+
+    dropdown.addEventListener('click', function (e) {
+      const item = e.target.closest('[data-scope]');
+      if (!item) return;
+      dropdown.querySelectorAll('.uuif-scope-item').forEach(i => i.classList.remove('sel'));
+      item.classList.add('sel');
+      const names = {
+        'global':'All Customers (Global)',
+        'contoso':'Contoso Dental Partners',
+        'fabrikam':'Fabrikam Logistics',
+        'tailspin':'Tailspin Credit Union',
+        'wingtip':'Wingtip Toys Retail'
+      };
+      scopeLabel.textContent = names[item.dataset.scope] || 'All Customers (Global)';
+      dropdown.classList.remove('open');
+      trigger.classList.remove('open');
+      trigger.setAttribute('aria-expanded', 'false');
+    });
+
+    document.addEventListener('click', function () {
+      dropdown.classList.remove('open');
+      trigger.classList.remove('open');
+      trigger.setAttribute('aria-expanded', 'false');
+    });
+  }
+
+  /* ── avatar menu ────────────────────────────────────────── */
+  const avatarBtn  = document.getElementById('avatar-btn');
+  const avatarMenu = document.getElementById('avatar-menu');
+  if (avatarBtn && avatarMenu) {
+    avatarBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      avatarMenu.classList.toggle('open');
+    });
+    document.addEventListener('click', function () { avatarMenu.classList.remove('open'); });
+  }
+
+  /* ── scope link shortcuts (overview page) ───────────────── */
+  document.addEventListener('click', function (e) {
+    const link = e.target.closest('[data-scope-link]');
+    if (!link) return;
+    e.preventDefault();
+    const scope = link.dataset.scopeLink;
+    const names = {
+      'contoso':'Contoso Dental Partners',
+      'fabrikam':'Fabrikam Logistics',
+      'tailspin':'Tailspin Credit Union',
+      'wingtip':'Wingtip Toys Retail'
+    };
+    if (scopeLabel) scopeLabel.textContent = names[scope] || 'All Customers (Global)';
+    if (dropdown) {
+      dropdown.querySelectorAll('.uuif-scope-item').forEach(i => i.classList.remove('sel'));
+      const target = dropdown.querySelector('[data-scope="' + scope + '"]');
+      if (target) target.classList.add('sel');
+    }
+  });
+
+  /* ── hash routing ───────────────────────────────────────── */
+  window.addEventListener('hashchange', function () {
+    const hash = window.location.hash.replace('#','') || 'overview';
+    activate(hash);
+  });
+
+  /* ── initial load ───────────────────────────────────────── */
+  activate(window.location.hash.replace('#','') || 'overview');
+
+}());
+</script>
+    </main>
+
+</div><!-- /uuif-main -->
+</div><!-- /uuif-app -->
+</body>
+</html>
