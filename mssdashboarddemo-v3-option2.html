@@ -2900,86 +2900,93 @@ function custGo(v){location.hash=__demoPage()+(v?('?customer='+encodeURIComponen
   <div class="uuif-card">
     <div class="uuif-card-hd"><span class="uuif-card-title">Recent SOC alerts</span></div>
     <div class="uuif-card-bd">
-      
-      
-      <a class="ralert" href="#/p/demo-northwind/alerts">
-        <span class="ra-head">
-          <span class="uuif-sev-cell ra-sev">
-            <span class="uuif-sev uuif-sev--major"></span>
-            <span class="uuif-sev-text uuif-sev-text--major">major</span>
-          </span>
-          <span class="ra-title">Contoso Dental Partners</span>
-          <span class="uuif-chip  ra-state">With the SOC</span>
-        </span>
-        
-        <span class="ra-sub">Multiple failed sign in attempts followed by a success &middot; Aug 19</span>
-      </a>
-      
-      <a class="ralert" href="#/p/demo-northwind/alerts">
-        <span class="ra-head">
-          <span class="uuif-sev-cell ra-sev">
-            <span class="uuif-sev uuif-sev--critical"></span>
-            <span class="uuif-sev-text uuif-sev-text--critical">critical</span>
-          </span>
-          <span class="ra-title">Wingtip Toys Retail</span>
-          <span class="uuif-chip  ra-state">With the SOC</span>
-        </span>
-        
-        <span class="ra-sub">Administrator account created outside the change window &middot; Aug 17</span>
-      </a>
-      
-      <a class="ralert" href="#/p/demo-northwind/alerts">
-        <span class="ra-head">
-          <span class="uuif-sev-cell ra-sev">
-            <span class="uuif-sev uuif-sev--critical"></span>
-            <span class="uuif-sev-text uuif-sev-text--critical">critical</span>
-          </span>
-          <span class="ra-title">Fabrikam Logistics</span>
-          <span class="uuif-chip uuif-chip--success ra-state">Closed</span>
-        </span>
-        
-        <span class="ra-sub">Ransomware behavior blocked on a file server, host isolated &middot; Aug 15</span>
-      </a>
-      
-      <a class="ralert" href="#/p/demo-northwind/alerts">
-        <span class="ra-head">
-          <span class="uuif-sev-cell ra-sev">
-            <span class="uuif-sev uuif-sev--major"></span>
-            <span class="uuif-sev-text uuif-sev-text--major">major</span>
-          </span>
-          <span class="ra-title">Tailspin Credit Union</span>
-          <span class="uuif-chip uuif-chip--success ra-state">Closed</span>
-        </span>
-        
-        <span class="ra-sub">Unusual volume of outbound traffic from a workstation &middot; Aug 14</span>
-      </a>
-      
-      <a class="ralert" href="#/p/demo-northwind/alerts">
-        <span class="ra-head">
-          <span class="uuif-sev-cell ra-sev">
-            <span class="uuif-sev uuif-sev--major"></span>
-            <span class="uuif-sev-text uuif-sev-text--major">major</span>
-          </span>
-          <span class="ra-title">Fabrikam Logistics</span>
-          <span class="uuif-chip uuif-chip--success ra-state">Closed</span>
-        </span>
-        
-        <span class="ra-sub">Remote access attempt from an unfamiliar location &middot; Aug 12</span>
-      </a>
-      
-      <a class="ralert" href="#/p/demo-northwind/alerts">
-        <span class="ra-head">
-          <span class="uuif-sev-cell ra-sev">
-            <span class="uuif-sev uuif-sev--major"></span>
-            <span class="uuif-sev-text uuif-sev-text--major">major</span>
-          </span>
-          <span class="ra-title">Contoso Dental Partners</span>
-          <span class="uuif-chip uuif-chip--success ra-state">Closed</span>
-        </span>
-        
-        <span class="ra-sub">Suspicious script execution stopped on a front desk computer &middot; Aug 10</span>
-      </a>
-      
+      <div class="uuif-table-scroll">
+        <table class="uuif-table">
+          <thead>
+            <tr>
+              <th>Severity</th>
+              <th>Customer</th>
+              <th>Description</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="clickable" onclick="location.hash='#/p/demo-northwind/alerts'">
+              <td>
+                <span class="uuif-sev-cell">
+                  <span class="uuif-sev uuif-sev--major"></span>
+                  <span class="uuif-sev-text uuif-sev-text--major">Major</span>
+                </span>
+              </td>
+              <td><strong>Contoso Dental Partners</strong></td>
+              <td>Multiple failed sign in attempts followed by a success</td>
+              <td><span class="uuif-chip">With the SOC</span></td>
+              <td>Aug 19</td>
+            </tr>
+            <tr class="clickable" onclick="location.hash='#/p/demo-northwind/alerts'">
+              <td>
+                <span class="uuif-sev-cell">
+                  <span class="uuif-sev uuif-sev--critical"></span>
+                  <span class="uuif-sev-text uuif-sev-text--critical">Critical</span>
+                </span>
+              </td>
+              <td><strong>Wingtip Toys Retail</strong></td>
+              <td>Administrator account created outside the change window</td>
+              <td><span class="uuif-chip">With the SOC</span></td>
+              <td>Aug 17</td>
+            </tr>
+            <tr class="clickable" onclick="location.hash='#/p/demo-northwind/alerts'">
+              <td>
+                <span class="uuif-sev-cell">
+                  <span class="uuif-sev uuif-sev--critical"></span>
+                  <span class="uuif-sev-text uuif-sev-text--critical">Critical</span>
+                </span>
+              </td>
+              <td><strong>Fabrikam Logistics</strong></td>
+              <td>Ransomware behavior blocked on a file server, host isolated</td>
+              <td><span class="uuif-chip uuif-chip--success">Closed</span></td>
+              <td>Aug 15</td>
+            </tr>
+            <tr class="clickable" onclick="location.hash='#/p/demo-northwind/alerts'">
+              <td>
+                <span class="uuif-sev-cell">
+                  <span class="uuif-sev uuif-sev--major"></span>
+                  <span class="uuif-sev-text uuif-sev-text--major">Major</span>
+                </span>
+              </td>
+              <td><strong>Tailspin Credit Union</strong></td>
+              <td>Unusual volume of outbound traffic from a workstation</td>
+              <td><span class="uuif-chip uuif-chip--success">Closed</span></td>
+              <td>Aug 14</td>
+            </tr>
+            <tr class="clickable" onclick="location.hash='#/p/demo-northwind/alerts'">
+              <td>
+                <span class="uuif-sev-cell">
+                  <span class="uuif-sev uuif-sev--major"></span>
+                  <span class="uuif-sev-text uuif-sev-text--major">Major</span>
+                </span>
+              </td>
+              <td><strong>Fabrikam Logistics</strong></td>
+              <td>Remote access attempt from an unfamiliar location</td>
+              <td><span class="uuif-chip uuif-chip--success">Closed</span></td>
+              <td>Aug 12</td>
+            </tr>
+            <tr class="clickable" onclick="location.hash='#/p/demo-northwind/alerts'">
+              <td>
+                <span class="uuif-sev-cell">
+                  <span class="uuif-sev uuif-sev--major"></span>
+                  <span class="uuif-sev-text uuif-sev-text--major">Major</span>
+                </span>
+              </td>
+              <td><strong>Contoso Dental Partners</strong></td>
+              <td>Suspicious script execution stopped on a front desk computer</td>
+              <td><span class="uuif-chip uuif-chip--success">Closed</span></td>
+              <td>Aug 10</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
