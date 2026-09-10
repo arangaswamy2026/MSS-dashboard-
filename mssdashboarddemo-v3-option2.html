@@ -1530,31 +1530,77 @@ html[data-theme="dark"] .funnel .fbar.f0 .fn { color: var(--uuif-surface-bg); }
 }
 
 /* ---- SOC Metrics Widget ---- */
-/* ===== OPTION 2: Stacked Bar Widget ===== */
-.soc-metrics-widget {
-  background: var(--uuif-surface-secondary);
-  border: 1px solid var(--uuif-border-default);
-  border-radius: var(--uuif-radius-8);
-  padding: var(--uuif-sp-5);
-  display: flex;
-  flex-direction: column;
-  gap: var(--uuif-sp-4);
-  flex: 1;
-  width: 100%;
-}
+/* ===== OPTION 2: Stacked Bar Widget - Card Style ===== */
 
 /* Container for side-by-side layout */
 .soc-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--uuif-sp-4);
-  align-items: start;
+  align-items: stretch;
   margin-bottom: var(--uuif-sp-6);
+}
+
+.soc-row .uuif-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.soc-row .uuif-card-bd {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Security Alerts Card Metrics */
+.soc-summary-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--uuif-sp-4);
+  margin-bottom: var(--uuif-sp-4);
+  padding-bottom: var(--uuif-sp-4);
+  border-bottom: 1px solid var(--uuif-border-default);
+}
+
+.soc-metric-box {
+  display: flex;
+  flex-direction: column;
+  gap: var(--uuif-sp-2);
+}
+
+.soc-metric-label {
+  font: 700 11px/1.3 var(--uuif-font-family);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--uuif-text-tertiary);
+}
+
+.soc-metric-value {
+  font: 700 24px/1.2 var(--uuif-font-family);
+  color: var(--uuif-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Severity Section */
+.soc-severity-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--uuif-sp-3);
+  flex: 1;
+}
+
+.soc-severity-label {
+  font: 700 11px/1.3 var(--uuif-font-family);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--uuif-text-tertiary);
 }
 
 @media (max-width: 1100px) {
   .soc-row {
     grid-template-columns: 1fr;
+    align-items: start;
   }
 }
 
@@ -2713,43 +2759,48 @@ function custGo(v){location.hash=__demoPage()+(v?('?customer='+encodeURIComponen
 <!-- Side-by-side: Security Alerts Widget + What your SOC did -->
 <div class="soc-row">
 
-<div class="soc-metrics-widget">
-  <div class="soc-mw-header">
-    <div class="soc-mw-kpi">
-      <div class="soc-mw-kpi-label">SOC Alerts (30d)</div>
-      <div class="soc-mw-kpi-value">12</div>
-    </div>
-    <div class="soc-mw-spi">
-      <div class="soc-mw-spi-label">Detections Screened</div>
-      <div class="soc-mw-spi-value">48,213</div>
-    </div>
+<div class="uuif-card">
+  <div class="uuif-card-hd">
+    <span class="uuif-card-title">Security Alerts Summary</span>
   </div>
-
-  <div class="soc-mw-severity">
-    <div class="soc-mw-severity-title">Severity Breakdown (Stacked Bar - Option 2)</div>
-    <div class="soc-mw-severity-items">
-      <div class="soc-mw-severity-item soc-mw-critical" title="2 Critical Alerts">
-        <div class="soc-mw-severity-value">2</div>
+  <div class="uuif-card-bd">
+    <div class="soc-summary-metrics">
+      <div class="soc-metric-box">
+        <div class="soc-metric-label">SOC Alerts (30d)</div>
+        <div class="soc-metric-value">12</div>
       </div>
-      <div class="soc-mw-severity-item soc-mw-major" title="4 Major Alerts">
-        <div class="soc-mw-severity-value">4</div>
-      </div>
-      <div class="soc-mw-severity-item soc-mw-minor" title="6 Minor Alerts">
-        <div class="soc-mw-severity-value">6</div>
+      <div class="soc-metric-box">
+        <div class="soc-metric-label">Detections Screened</div>
+        <div class="soc-metric-value">48,213</div>
       </div>
     </div>
-    <div class="soc-bar-legend">
-      <div class="soc-legend-item">
-        <span class="soc-legend-dot critical"></span>
-        <span>Critical (2)</span>
+
+    <div class="soc-severity-section">
+      <div class="soc-severity-label">Severity Breakdown</div>
+      <div class="soc-mw-severity-items">
+        <div class="soc-mw-severity-item soc-mw-critical" title="2 Critical Alerts">
+          <div class="soc-mw-severity-value">2</div>
+        </div>
+        <div class="soc-mw-severity-item soc-mw-major" title="4 Major Alerts">
+          <div class="soc-mw-severity-value">4</div>
+        </div>
+        <div class="soc-mw-severity-item soc-mw-minor" title="6 Minor Alerts">
+          <div class="soc-mw-severity-value">6</div>
+        </div>
       </div>
-      <div class="soc-legend-item">
-        <span class="soc-legend-dot major"></span>
-        <span>Major (4)</span>
-      </div>
-      <div class="soc-legend-item">
-        <span class="soc-legend-dot minor"></span>
-        <span>Minor (6)</span>
+      <div class="soc-bar-legend">
+        <div class="soc-legend-item">
+          <span class="soc-legend-dot critical"></span>
+          <span>Critical (2)</span>
+        </div>
+        <div class="soc-legend-item">
+          <span class="soc-legend-dot major"></span>
+          <span>Major (4)</span>
+        </div>
+        <div class="soc-legend-item">
+          <span class="soc-legend-dot minor"></span>
+          <span>Minor (6)</span>
+        </div>
       </div>
     </div>
   </div>
