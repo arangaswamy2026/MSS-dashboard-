@@ -1597,6 +1597,34 @@ html[data-theme="dark"] .funnel .fbar.f0 .fn { color: var(--uuif-surface-bg); }
   color: var(--uuif-text-tertiary);
 }
 
+/* Horizontal Legend */
+.soc-bar-legend {
+  display: flex;
+  gap: var(--uuif-sp-3);
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin-top: var(--uuif-sp-2);
+}
+
+.soc-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--uuif-text-primary);
+}
+
+.soc-legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.soc-legend-dot.critical { background: #C8102E; }
+.soc-legend-dot.major { background: #FF8C42; }
+.soc-legend-dot.minor { background: #FFD700; }
+
 @media (max-width: 1100px) {
   .soc-row {
     grid-template-columns: 1fr;
